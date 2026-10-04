@@ -1,0 +1,203 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-lavender-50: #f7f5ff;
+  --color-lavender-100: #efeafc;
+  --color-lavender-200: #ddd4f8;
+  --color-lavender-300: #c4b5f0;
+  --color-lavender-400: #b39ddb;
+  --color-lavender-500: #9b7fd4;
+  --color-lavender-600: #7c5cbf;
+  --color-lavender-700: #6548a0;
+  --color-lavender-800: #4f387c;
+  --color-lavender-900: #3a295c;
+
+  --color-navy-50: #f0f0f2;
+  --color-navy-100: #d8d8dc;
+  --color-navy-200: #b8b8c0;
+  --color-navy-300: #9898a4;
+  --color-navy-400: #7a7a88;
+  --color-navy-500: #5e5e6c;
+  --color-navy-600: #484854;
+  --color-navy-700: #353540;
+  --color-navy-800: #2a2a32;
+  --color-navy-900: #1e1e24;
+  --color-navy-950: #141418;
+
+  --font-sans: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --animate-fade-in: fade-in 220ms ease-out;
+  --animate-slide-up: slide-up 280ms ease-out;
+  --animate-gate-flash: gate-flash 1.2s ease-out;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gate-flash {
+  0% { box-shadow: 0 0 0 0 rgba(155, 127, 212, 0.7); background-color: rgba(155, 127, 212, 0.35); }
+  100% { box-shadow: 0 0 0 12px rgba(155, 127, 212, 0); background-color: transparent; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-[#1a1a1f] text-navy-100 antialiased font-sans;
+    margin: 0;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  #root {
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  img, svg, video {
+    max-width: 100%;
+  }
+}
+
+@layer utilities {
+  .safe-top {
+    padding-top: max(env(safe-area-inset-top, 0px), 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 0px);
+  }
+
+  .app-bg {
+    background: #1a1a1f;
+  }
+
+  /* Shared content width */
+  .page-wrap {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+
+  .page-pad {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  @media (min-width: 768px) {
+    .page-pad {
+      padding-bottom: 2rem;
+    }
+  }
+
+  .glass {
+    background-color: rgba(42, 42, 50, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .glass-card {
+    background-color: rgba(42, 42, 50, 0.95);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(155, 127, 212, 0.28);
+  }
+
+  .text-display {
+    @apply text-[clamp(1.35rem,4vw,1.75rem)] font-semibold tracking-tight;
+  }
+
+  .text-h1 {
+    @apply text-[clamp(1.15rem,3.5vw,1.375rem)] font-semibold tracking-tight;
+  }
+
+  .text-h2 {
+    @apply text-[clamp(1rem,2.8vw,1.125rem)] font-semibold;
+  }
+
+  .text-body {
+    @apply text-[15px] font-normal leading-relaxed;
+  }
+
+  .text-caption {
+    @apply text-[13px] font-medium;
+  }
+
+  .touch-target {
+    @apply min-h-11 min-w-11;
+  }
+
+  .animate-in {
+    animation: var(--animate-slide-up);
+  }
+
+  .gate-changed {
+    animation: var(--animate-gate-flash);
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #7c5cbf;
+    box-shadow: 0 0 0 0 rgba(124, 92, 191, 0.6);
+    animation: var(--animate-pulse-soft);
+  }
+
+  .lavender-panel {
+    @apply rounded-2xl bg-lavender-600/20 border border-lavender-500/35;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip-row {
+    @apply flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ops-number {
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    font-weight: 700;
+    color: #fff;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .ops-number-lg {
+    font-size: clamp(1.35rem, 5.5vw, 1.85rem);
+  }
+
+  .ops-number-xl {
+    font-size: clamp(1.75rem, 7vw, 2.6rem);
+  }
+}

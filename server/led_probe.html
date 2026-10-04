@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru" >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script data-skip-moving="true">(function(w, d, n) {var cl = "bx-core";var ht = d.documentElement;var htc = ht ? ht.className : undefined;if (htc === undefined || htc.indexOf(cl) !== -1){return;}var ua = n.userAgent;if (/(iPad;)|(iPhone;)/i.test(ua)){cl += " bx-ios";}else if (/Windows/i.test(ua)){cl += ' bx-win';}else if (/Macintosh/i.test(ua)){cl += " bx-mac";}else if (/Linux/i.test(ua) && !/Android/i.test(ua)){cl += " bx-linux";}else if (/Android/i.test(ua)){cl += " bx-android";}cl += (/(ipad|iphone|android|mobile|touch)/i.test(ua) ? " bx-touch" : " bx-no-touch");cl += w.devicePixelRatio && w.devicePixelRatio >= 2? " bx-retina": " bx-no-retina";if (/Safari/i.test(ua) && !/Chrome/i.test(ua)){cl += " bx-safari";}else if (/AppleWebKit/.test(ua)){cl += " bx-chrome";}else if (/Opera/.test(ua)){cl += " bx-opera";}else if (/Firefox/.test(ua)){cl += " bx-firefox";}ht.className = htc ? htc + " " + cl : cl;})(window, document, navigator);</script>
+
+
+<link href="/bitrix/js/ui/design-tokens/dist/ui.design-tokens.min.css?175827157823463" type="text/css" rel="stylesheet"/>
+<link href="/bitrix/js/ui/fonts/opensans/ui.font.opensans.min.css?17582715682320" type="text/css" rel="stylesheet"/>
+<link href="/bitrix/js/main/popup/dist/main.popup.bundle.min.css?175837320828056" type="text/css" rel="stylesheet"/>
+<link href="/local/templates/pulkovo_main/components/bitrix/form.result.new/error/style.css?1758268484661" type="text/css" rel="stylesheet"/>
+<link href="/local/assets/main/css/new2.css?1758268547793" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/dist/app.css?1788341771360979" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/file_1.css?178895468824124" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/file_2.css?177099605917432" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/file_3.css?17582685472905" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/animate.min.css?175826854658129" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/chosen.css?175826854711879" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/slick.css?17582685471776" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/fotorama.css?175826854717626" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/jquery.fancybox.min.css?175826854712795" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/assets/main/css/custom.css?177099605926141" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/templates/pulkovo_main/components/bitrix/breadcrumb/main/style.min.css?1758268484467" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/templates/pulkovo_main/styles.css?177745867656" type="text/css" rel="stylesheet" data-template-style="true"/>
+<link href="/local/templates/pulkovo_main/template_styles.css?17774586764584" type="text/css" rel="stylesheet" data-template-style="true"/>
+
+
+
+
+
+
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+	<title>Нашли ошибку?</title>
+	
+<!-- Yandex.Metrika counter -->
+<noscript><div><img src="https://mc.yandex.ru/watch/79391614" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+</head>
+<body class="uk-invisible namorakvobud" style="flex-direction: column;">
+
+<div id="panel"></div>
+
+	
+
+
+
+	<nav class="uk-navbar-container md-relative z3 tm-navbar-container ">
+		<div class="uk-container">
+			            <div class="uk-navbar tm-navbar v2">
+            	<div class="uk-navbar-left flex-1 revealOnScroll fade" data-animation="fadeIn" data-timeout="0">
+            		<a class="uk-navbar-item uk-logo" href="/" style="height:45px;padding:0;">
+            			            			<img src="/local/templates/pulkovo_main/main2/logo-h-pulkovo-ru.svg" style="height: 45px;"
+            				alt="">
+            			            		</a>
+            		<div class="dropdown">
+            			<a href="/passengers/departure/" class="dropbtn">Вылетающим</a>
+            			<div class="dropdown-content">
+            				<a href="/transport/">Как добраться</a>
+            				<a href="/passengers/services/fastrack/">Приоритетный проход</a>
+            				<a href="/passengers/passenger_registration/">Регистрация на рейс</a>
+            				<a href="/passengers/baggage/">Багаж</a>
+            				<a href="/passengers/security/">Досмотр и контроль</a>
+            			</div>
+            		</div>
+            		<div class="dropdown">
+            			<a href="/passengers/meeting/" class="dropbtn">Встречающим</a>
+            			<div class="dropdown-content">
+            				<a href="/transport/">Транспорт и парковки</a>
+            				<a href="/passengers/services/cafes/">Магазины и кафе</a>
+            			</div>
+            		</div>
+            		<div class="dropdown">
+            			<a href="/passengers/arrival/" class="dropbtn">Прилетающим</a>
+            			<div class="dropdown-content">
+            				<a href="/passengers/security/">Таможенный и пограничный контроль</a>
+            				<a href="/passengers/transfers/">Пересадка в аэропорту</a>
+            				<a href="/passengers/baggage/">Получение багажа</a>
+           				
+            				<a href="/transport/">Добраться в город</a>
+            				<a href="/passengers/services/city-guide/">Путеводитель по Санкт-Петербургу</a>
+            			</div>
+            		</div>
+
+                    <div class="dropdown dropdown__contacts">
+
+                        <span class="dropbtn">Контакты</span>
+
+                        <div class="dropdown-content dropdown__contacts--content">
+
+                            <div class="dropdown__contacts--box">
+                                <a href="/passengers/contact-us/">Обратная связь</a>
+                            </div>
+
+                            <div class="dropdown__contacts--box">
+                                <span class="dropdown__contacts--descr">Общие вопросы круглосуточно</span>
+                                <a href="tel:78123243000">+7 (812) 324-30-00</a>
+                            <!--    <a href="tel:78123373444">+7 (812) 337-34-44</a> -->
+                            </div>
+
+                            <div class="dropdown__contacts--box">
+                                <span class="dropdown__contacts--descr">
+                                    По вопросам неприбытия багажа и забытых вещей с 08:00 до 20:00
+                                </span>
+                                <a href="tel:78123373444">+7 (812) 337-38-22</a>
+                            </div>
+
+                            <div class="dropdown__contacts--box">
+                                <a href="/passengers/destinations/airlines/">Контакты авиакомпаний</a>
+                                <a href="/partners/contacts/">Контакты для партнеров</a>
+                            </div>
+
+                            <div class="dropdown__contacts--box">
+                            <ul class="uk-iconnav uk-flex-center tm-footer-social tm-footer-muted dropdown__contacts--social">
+
+                                <li style="padding-left:0;">
+                                    <a target="_blank"
+                                       href="https://max.ru/pulkovo_led"
+                                       data-uk-icon1="icon: max; ratio: 1.8"
+                                       class="uk-icon"
+                                       style="margin-bottom: -4px;">
+<svg width="25" height="25" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.70413 18.9458C7.83952 18.9458 6.973 18.6724 5.46679 17.5788C4.51407 18.8091 1.49713 19.7705 1.36556 18.1256C1.36556 16.8908 1.09336 15.8474 0.784858 14.7083C0.417382 13.3049 0 11.742 0 9.47745C0 4.06892 4.4188 0 9.65422 0C14.8942 0 18.9999 4.26941 18.9999 9.52757C19.0175 14.7044 14.8585 18.9182 9.70413 18.9458ZM9.78125 4.67493C7.23159 4.5428 5.24449 6.31526 4.80443 9.09471C4.44148 11.3957 5.08571 14.1979 5.63465 14.3438C5.89778 14.4075 6.56015 13.8699 6.973 13.4552C7.65566 13.9289 8.45061 14.2134 9.27767 14.28C11.9195 14.4076 14.1769 12.3876 14.3543 9.73717C14.4576 7.08113 12.4235 4.83148 9.78125 4.67949L9.78125 4.67493Z" fill="#A5AFB5"/>
+</svg>
+                                    </a>
+                                </li>
+
+                                
+                                <li>
+                                    <a target="_blank"
+                                       href="https://vk.com/pulkovo_led"
+                                       data-uk-icon1="icon: vk; ratio: 1.5"
+                                       class="uk-icon">
+                                        <svg width="38" height="38" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0C0.243598 11.8679 6.08985 19 16.3397 19H16.9208V12.2102C20.6872 12.5906 23.5351 15.3864 24.6781 19H30C28.5384 13.5986 24.6969 10.6126 22.2984 9.47147C24.6969 8.06406 28.0698 4.64064 28.8755 0H24.0409C22.9916 3.76577 19.8814 7.18919 16.9208 7.51251V0H12.0861V13.1612C9.08798 12.4004 5.30294 8.71071 5.13429 0H0Z" fill="#A5AFB5"/>
+</svg>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank"
+                                       href="http://zen.yandex.ru/id/62289ed35b283f7ef4dd5b31"
+                                       data-uk-icon1="icon: zen; ratio: 1.5"
+                                       class="_uk-icon">
+          <svg width="30" height="30" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 9.12C0 4.82077 0 2.67119 1.33559 1.33559C2.67119 1.13249e-07 4.82078 0 9.12 0H9.21529C9.16746 3.85116 8.90459 6.01572 7.46015 7.46014C6.01571 8.90461 3.85118 9.1675 0 9.2153V9.12ZM0 9.7847V9.88C0 14.1792 0 16.3288 1.33559 17.6644C2.67119 19 4.82078 19 9.12 19H9.21529C9.16746 15.1488 8.90459 12.9843 7.46015 11.5399C6.01571 10.0954 3.85118 9.83256 0 9.7847ZM9.78471 19H9.88C14.1792 19 16.3288 19 17.6644 17.6644C19 16.3288 19 14.1792 19 9.88V9.7847C15.1488 9.83256 12.9843 10.0954 11.5398 11.5399C10.0954 12.9843 9.83254 15.1488 9.78471 19ZM19 9.2153V9.12C19 4.82077 19 2.67119 17.6644 1.33559C16.3288 1.13249e-07 14.1792 0 9.88 0H9.78471C9.83254 3.85116 10.0954 6.01572 11.5398 7.46014C12.9843 8.90461 15.1488 9.16744 19 9.2153Z" fill="#A5AFB5"/>
+</svg>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank"
+                                       href="https://ok.ru/airportpulkovo"
+                                       data-uk-icon1="icon: odnoklassniki; ratio: 1.5"
+                                       class="uk-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                             viewBox="0 0 20 20" data-svg="odnoklassniki">
+                                            <path d="M10,3.12A2.11,2.11,0,1,1,7.89,5.23,2.11,2.11,0,0,1,10,3.12Zm0,7.2A5.09,5.09,0,1,0,4.9,5.23,5.1,5.1,0,0,0,10,10.33Z"></path>
+                                            <path d="M12.06,14.49a9.54,9.54,0,0,0,3-1.23,1.49,1.49,0,0,0-1.59-2.53,6.47,6.47,0,0,1-6.86,0A1.49,1.49,0,0,0,5,13.26a9.56,9.56,0,0,0,3,1.23L5.09,17.33A1.49,1.49,0,0,0,7.2,19.44l2.8-2.8,2.8,2.8a1.49,1.49,0,0,0,2.11-2.11l-2.85-2.85"></path>
+                                        </svg>
+                                    </a>
+                                </li>
+
+                                                            </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+            	</div>
+            	<div class="uk-navbar-right uk-flex-right revealOnScroll fade" data-animation="fadeIn" data-timeout="0">
+            		            	</div>
+            	<div class="uk-navbar-right uk-flex-right revealOnScroll fade" data-animation="fadeIn" data-timeout="0"
+            		style="flex-wrap:nowrap;align-items: center;height: 51px;">
+
+            		<ul class="tm-navbar-lang uk-visible@s">
+            			<li>
+                            <a href="/ajax/online/?special_version=Y"><img class="open_mibik_vers" src="/local/templates/pulkovo_main/images/open_eye.png"></a>
+            			</li>
+            			<li>
+            				<a class="notranslate" data-google-lang="ru">RU</a>
+            			</li>
+            			<li>
+            				<a class="notranslate" data-google-lang="en">EN</a>
+            			</li>
+            		</ul>
+
+            	</div>
+            </div>
+		</div>
+	</nav>
+	<nav class="uk-navbar-container md-relative z2 tm-navbar-container ">
+		<div class="uk-container">
+			<div class="uk-navbar tm-navbar submm">
+				<div class="uk-navbar-left flex-1 zero revealOnScroll fade" data-animation="fadeIn" data-timeout="0">
+					<div class="uk-mobile-me" style="padding-left: 0">
+						<a class="uk-navbar-item uk-logo" href="/" style="margin:0; padding:0;">
+														<img src="/local/templates/pulkovo_main/main2/logo-h-pulkovo-ru.svg" style="height: 40px;" alt="" >
+													</a>
+					</div>
+					<div class="uk-mobile-me">
+					</div>
+					<div class="tm-navbar-nav-container">
+    <ul class="uk-navbar-nav tm-navbar-nav">
+        <li><a href="/passengers/"> <span class="uk-icon"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                                               xmlns="http://www.w3.org/2000/svg"><path
+                                d="M11.4293 23.0045H2.94879C2.6337 23.0045 2.34659 22.8584 2.16095 22.6038C1.97525 22.349 1.92413 22.0307 2.02061 21.7306C2.98409 18.7352 5.92237 16.6431 9.16593 16.6431C10.6752 16.6431 12.1245 17.0976 13.3572 17.9574C13.7988 18.2653 14.4063 18.1571 14.7144 17.7155C15.0223 17.274 14.9141 16.6664 14.4725 16.3584C13.8623 15.9328 13.2103 15.5855 12.5283 15.3205C13.4357 14.4955 14.0377 13.3402 14.1422 12.0466C15.5181 10.7064 17.3215 9.97202 19.2547 9.97202C20.764 9.97202 22.2133 10.4265 23.4461 11.2863C23.8876 11.5942 24.4952 11.486 24.8032 11.0444C25.1111 10.6029 25.0029 9.99531 24.5613 9.6873C23.9511 9.26167 23.2991 8.91445 22.6171 8.64937C23.6181 7.73931 24.2473 6.42739 24.2473 4.97124C24.2474 2.23013 22.0172 0 19.2761 0C16.5349 0 14.3048 2.23013 14.3048 4.97134C14.3048 6.42158 14.929 7.72881 15.9229 8.63843C15.7869 8.69077 15.6519 8.74644 15.5179 8.80542C14.9079 9.07383 14.3342 9.40332 13.801 9.79092C13.0652 7.96401 11.2743 6.67114 9.18722 6.67114C6.44601 6.67114 4.21593 8.90127 4.21593 11.6425C4.21593 13.0885 4.83653 14.3923 5.8253 15.3016C3.18136 16.2924 1.03756 18.4202 0.164804 21.1338C-0.12465 22.0337 0.0286708 22.9881 0.585507 23.7521C1.14225 24.516 2.00357 24.9542 2.94884 24.9542H11.4293C11.9677 24.9542 12.4041 24.5177 12.4041 23.9794C12.4041 23.4411 11.9676 23.0045 11.4293 23.0045ZM19.2761 1.94951C20.9423 1.94951 22.2979 3.30508 22.2979 4.97129C22.2979 6.6375 20.9423 7.99307 19.2761 7.99307C17.6099 7.99307 16.2544 6.6375 16.2544 4.97129C16.2544 3.30508 17.6099 1.94951 19.2761 1.94951ZM9.18726 8.62061C10.8535 8.62061 12.209 9.97617 12.209 11.6424C12.209 13.3086 10.8535 14.6642 9.18726 14.6642C7.52105 14.6642 6.16549 13.3086 6.16549 11.6424C6.16549 9.97617 7.52105 8.62061 9.18726 8.62061Z"
+                                fill="#D8DCDE"></path></svg></span> <span class="uk-transport">Пассажирам</span> </a>
+            <div data-uk-dropdown="mode: hover">
+                <div class="uk-container">
+                    <div class="uk-grid uk-grid-small " data-uk-grid="">
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/passengers/departure/">Табло рейсов</a></li>
+                            <li><a href="/passengers/passenger_registration/">Регистрация пассажиров</a></li>
+                            <li><a href="/passengers/baggage/">Багаж</a></li>
+                            <li><a href="/passengers/security/">Досмотр и контроль</a></li>
+                            <li><a href="/passengers/map/">Схема аэропорта</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/passengers/destinations/flight_schedule/">Расписание</a></li>
+                            <li><a href="https://airtickets.pulkovoairport.ru" target="_blank">Авиабилеты</a></li>
+                            <li><a href="/passengers/shuttle/">Шаттлы Петербург–Москва</a></li>
+                            <li><a href="/passengers/destinations/airlines/">Авиакомпании</a></li>
+                            <li><a href="/passengers/services/">Услуги</a></li>
+                            <li><a href="/passengers/cards-foreign/">Банковские карты для иностранцев</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/passengers/pulkovo_children/">Пассажирам с детьми</a></li>
+                            <li><a href="/passengers/prm/">Пассажирам особых категорий</a></li>
+                            <li><a href="/passengers/animals-plants/">Пассажирам с животными и растениями</a></li>
+                            <li><a href="/passengers/contact-us/">Обратная связь</a></li>
+                            <li><a href="/passengers/faq/">Вопросы и ответы</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li><a href="/transport/"> <span class="uk-icon"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                                              xmlns="http://www.w3.org/2000/svg"><path
+                                d="M9.76561 13.7928C8.4194 13.7928 7.3242 14.888 7.3242 16.2342C7.3242 16.7734 7.76156 17.2108 8.30077 17.2108C8.84017 17.2108 9.27733 16.7734 9.27733 16.2342C9.27733 15.9649 9.49649 15.7459 9.76561 15.7459H15.1367C15.4058 15.7459 15.625 15.9649 15.625 16.2342C15.625 16.7734 16.0622 17.2108 16.6016 17.2108C17.141 17.2108 17.5781 16.7734 17.5781 16.2342C17.5781 14.888 16.4829 13.7928 15.1367 13.7928H9.76561ZM3.90642 14.2811C3.36702 14.2811 2.92986 14.7183 2.92986 15.2577C2.92986 15.7969 3.36702 16.2342 3.90642 16.2342H4.88298C5.42219 16.2342 5.85955 15.7969 5.85955 15.2577C5.85955 14.7183 5.42219 14.2811 4.88298 14.2811C4.70484 14.2811 4.08438 14.2811 3.90642 14.2811ZM20.1172 14.2811C19.5778 14.2811 19.1406 14.7183 19.1406 15.2577C19.1406 15.7969 19.5778 16.2342 20.1172 16.2342H21.0936C21.633 16.2342 22.0701 15.7969 22.0701 15.2577C22.0701 14.7183 21.633 14.2811 21.0936 14.2811C20.9156 14.2811 20.2952 14.2811 20.1172 14.2811ZM23.0467 15.2088V13.0604C23.0467 11.9835 22.1707 11.1073 21.0936 11.1073H3.90642C2.82934 11.1073 1.95329 11.9835 1.95329 13.0604V18.6266H24.0233C24.5627 18.6266 24.9998 19.064 24.9998 19.6032V23.07C24.9998 23.6094 24.5627 24.0466 24.0233 24.0466H20.1172C19.5778 24.0466 19.1406 23.6094 19.1406 23.07V20.5798H5.85955V23.07C5.85955 23.6094 5.42219 24.0466 4.88298 24.0466H0.976727C0.437328 24.0466 0.000162736 23.6094 0.000162736 23.07V13.0604C0.000162736 11.9072 0.50275 10.8696 1.30002 10.154C0.794575 9.81846 0.404331 9.4017 0.123378 8.89664C-0.138883 8.42533 0.0306804 7.83062 0.501987 7.56836C0.973103 7.30609 1.56782 7.47566 1.83008 7.94697C1.98743 8.22964 2.22299 8.45451 2.56155 8.63895L3.76737 5.49163C4.24593 4.24307 5.31099 3.33613 6.61658 3.06547C6.91202 3.00425 7.24696 2.94054 7.61717 2.87817V1.73242C7.61717 1.32787 7.94505 1 8.3496 1H9.5703V2.61705C10.1755 2.55621 10.8293 2.5091 11.5234 2.4843V1H13.4766V2.47801C14.1741 2.49861 14.8273 2.54248 15.4297 2.60065V1H16.6504C17.0547 1 17.3826 1.32787 17.3826 1.73242V2.85853C17.7612 2.92242 18.1011 2.98842 18.3979 3.05155C19.6917 3.32697 20.7491 4.22858 21.2265 5.46378L22.4461 8.61988C22.7713 8.43143 23.0169 8.19874 23.1876 7.91645C23.4667 7.45487 24.0671 7.30705 24.5285 7.58609C24.9901 7.86514 25.1379 8.46557 24.8589 8.92715C24.5672 9.40952 24.1751 9.8156 23.6883 10.1439C24.4923 10.8599 24.9998 11.9017 24.9998 13.0604V15.2088C24.9998 15.7482 24.5627 16.1854 24.0233 16.1854C23.4839 16.1854 23.0467 15.748 23.0467 15.2088ZM4.45574 9.15413H20.5587L19.4046 6.16779C19.1658 5.55037 18.6377 5.09948 17.9913 4.96196C16.8249 4.71381 14.9425 4.41798 12.5976 4.41798C10.2156 4.41798 8.24584 4.72239 7.01292 4.97798C6.36194 5.11283 5.83056 5.56621 5.59118 6.19048L4.45574 9.15413ZM23.0467 22.0934V20.5798H21.0936V22.0934H23.0467ZM1.95329 20.5798V22.0934H3.90642V20.5798H1.95329Z"
+                                fill="#D8DCDE"></path></svg></span> <span
+                        class="uk-transport">Транспорт и парковки</span> </a>
+            <div data-uk-dropdown="mode: hover">
+                <div class="uk-container">
+                    <div class="uk-grid uk-grid-small" data-uk-grid="">
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/transport/#parking-legend__title">Парковочный комплекс</a></li>
+                            <li><a href="/transport/#public-transport__title">Общественный транспорт</a></li>
+                            <li><a href="/transport/#taxi__title">Такси</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/transport/#kashering__title">Каршеринг</a></li>
+                            <li><a href="#passengers-disabilities__title">Пассажирам с инвалидностью</a></li>
+
+                         
+                        </ul>
+                       
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li><a href="/partners/"> <span class="uk-icon"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg"><g
+                                clip-path="url(#clip0)"><path
+                                    d="M24.1374 12.5903C24.119 12.5718 24.0998 12.5542 24.0799 12.5372L17.511 6.94391C16.5821 6.15293 15.4 5.71806 14.1804 5.71806C14.1745 5.71806 14.1686 5.71806 14.1627 5.71806C12.7972 5.72283 11.5134 6.25708 10.5477 7.22277L9.66169 8.10874C9.28804 8.48239 8.67483 8.48849 8.2945 8.12228C8.11197 7.9468 8.01012 7.70457 8.00764 7.44078C8.00497 7.16383 8.11445 6.89394 8.30785 6.70035C8.31529 6.69291 8.32273 6.68528 8.32998 6.67765L10.2513 4.62705C11.7371 3.04128 13.805 2.09828 15.9695 2.00883L23.3567 8.03187C23.7746 8.37271 24.3899 8.31015 24.7305 7.89225C25.0714 7.47416 25.0088 6.85904 24.5909 6.51819L16.9255 0.268365C16.7511 0.126457 16.5333 0.0488281 16.3084 0.0488281C14.4711 0.0488281 12.6749 0.549509 11.1122 1.46656C9.53581 0.538065 7.74633 0.0488281 5.91031 0.0488281C5.65129 0.0488281 5.40296 0.151635 5.21985 0.33455L0.237465 5.31484C-0.144005 5.69631 -0.144196 6.31449 0.237084 6.69596C0.427819 6.88688 0.677682 6.98225 0.927736 6.98225C1.1776 6.98225 1.42746 6.88688 1.61801 6.69634L6.30533 2.01131C7.36829 2.06147 8.40532 2.31553 9.36701 2.75651C9.18066 2.92779 9.00003 3.10594 8.82608 3.29152L6.91434 5.33201C6.36026 5.89296 6.04707 6.66735 6.0547 7.45947C6.06214 8.25198 6.37666 8.98726 6.94009 9.52952C7.49551 10.064 8.22641 10.3543 8.99755 10.3476C9.77003 10.3407 10.4964 10.0361 11.0426 9.48966L11.9288 8.60369C12.5271 8.00517 13.323 7.67405 14.1693 7.671H14.1804C14.9363 7.671 15.6691 7.9407 16.2449 8.43089L22.7784 13.9941C23.0797 14.3191 23.0725 14.8291 22.7562 15.1452C22.601 15.3006 22.3925 15.3861 22.1693 15.3861C21.9462 15.3861 21.7377 15.3006 21.5825 15.1452L21.3822 14.9447C21.0007 14.5634 20.3823 14.5632 20.0011 14.9447C19.6198 15.326 19.6196 15.9443 20.0011 16.3258L20.2015 16.5261C20.2605 16.5852 20.3221 16.6409 20.3854 16.6937C20.4134 16.7315 20.4434 16.7681 20.4775 16.8023C20.8012 17.1259 20.8012 17.6526 20.4775 17.9762C20.154 18.2999 19.6274 18.2999 19.3037 17.9762C19.3013 17.9738 19.2986 17.9711 19.2961 17.9686L18.9724 17.6472C18.591 17.2659 17.9728 17.2659 17.5915 17.6474C17.21 18.0287 17.21 18.6471 17.5915 19.0283L17.8145 19.2513L17.8147 19.2515C17.9837 19.4205 18.0857 19.6614 18.0943 19.9122C18.0989 20.049 18.0779 20.3068 17.8847 20.5001C17.5791 20.8058 17.05 20.7741 16.7055 20.4297C16.6872 20.4114 16.6684 20.3938 16.6485 20.377L16.502 20.2521C16.1032 19.912 15.5068 19.9477 15.1512 20.3328C14.7955 20.7179 14.8073 21.3151 15.1779 21.6859C15.3408 21.8487 15.432 22.062 15.4347 22.2861C15.4372 22.5033 15.3549 22.7065 15.2033 22.8581C14.8796 23.1818 14.3465 23.1751 14.0116 22.8404L13.8735 22.7034C14.2723 21.6866 14.0621 20.4838 13.2416 19.6633V19.6631C12.8742 19.2959 12.4266 19.0386 11.9416 18.9097C12.0621 18.0708 11.8002 17.1872 11.1563 16.5431C10.6737 16.0605 10.0565 15.7933 9.42442 15.7399C9.37674 15.1116 9.10818 14.4951 8.61723 14.0042C8.13181 13.5188 7.5102 13.2512 6.87429 13.2C6.82317 12.5641 6.55557 11.9425 6.07015 11.4571C4.98735 10.3743 3.22667 10.372 2.141 11.4502L0.776293 12.7678C0.772287 12.7718 0.768091 12.7758 0.764085 12.7798C0.239945 13.304 -0.0488281 14.003 -0.0488281 14.7479C-0.0488281 15.4925 0.239945 16.1915 0.764085 16.7157C1.17893 17.1307 1.69354 17.3863 2.23122 17.484C2.20604 18.228 2.47613 18.9803 3.0428 19.5469C3.54825 20.0524 4.22269 20.3286 4.94767 20.3286C4.96141 20.3286 4.97533 20.3284 4.98906 20.3282C5.06803 20.9086 5.32895 21.4677 5.77298 21.9115C6.31295 22.4515 7.02287 22.7212 7.7347 22.7212C7.79459 22.7212 7.85429 22.7185 7.91418 22.7147C8.01756 23.2831 8.28878 23.8059 8.70363 24.2207C9.25581 24.7727 9.98079 25.0487 10.7062 25.0487C11.4142 25.0487 12.1222 24.7845 12.6692 24.2581C13.2138 24.7845 13.9187 25.0487 14.6225 25.0487C15.3344 25.0487 16.0445 24.779 16.5842 24.2392C17.0163 23.807 17.286 23.2573 17.364 22.6613C18.0592 22.6601 18.7457 22.4011 19.2656 21.881C19.7224 21.4242 19.9908 20.8241 20.0394 20.1661C20.7282 20.1302 21.3694 19.8464 21.8586 19.3572C22.4253 18.7905 22.6954 18.038 22.6702 17.2938C23.2237 17.1942 23.7326 16.9308 24.1374 16.5261C25.2224 15.441 25.2224 13.6754 24.1374 12.5903ZM3.33119 15.3227C3.32719 15.3267 3.32299 15.3307 3.31898 15.3347C3.16373 15.4902 2.95525 15.5756 2.73209 15.5756C2.50893 15.5756 2.30046 15.4902 2.1452 15.3347C1.98975 15.1793 1.9043 14.971 1.9043 14.7479C1.9043 14.527 1.98803 14.3208 2.14024 14.1659L3.50304 12.85C3.50724 12.846 3.51125 12.842 3.51525 12.838C3.6707 12.6828 3.87917 12.5971 4.10233 12.5971C4.3253 12.5971 4.53378 12.6828 4.68923 12.838C4.84448 12.9935 4.93012 13.2019 4.93012 13.4251C4.93012 13.6105 4.87042 13.7854 4.76113 13.9286C4.73557 13.9521 4.71002 13.9758 4.68522 14.0006L3.68348 14.9827L3.33119 15.3227ZM5.57481 18.1273C5.2332 18.4426 4.71841 18.4605 4.42391 18.166C4.10119 17.8433 4.10024 17.3186 4.42105 16.9947L5.04647 16.3815L6.05794 15.4051C6.06214 15.4011 6.06614 15.3971 6.07015 15.3931C6.09647 15.3668 6.12146 15.3401 6.14625 15.313C6.47146 15.0647 6.93914 15.0881 7.2363 15.3853C7.55788 15.7069 7.55979 16.1723 7.24145 16.4935L5.57481 18.1273ZM8.346 20.5125C8.34486 20.5136 8.34352 20.5149 8.34238 20.5161C8.01069 20.8478 7.47758 20.8542 7.15391 20.5306C6.8308 20.2075 6.83691 19.6755 7.16707 19.3436L8.59777 17.9278C8.59911 17.9267 8.60025 17.9253 8.6014 17.9242C8.75685 17.7687 8.96532 17.6833 9.18848 17.6833C9.41145 17.6833 9.61992 17.7687 9.77537 17.9242C10.0985 18.2473 10.099 18.7728 9.7769 19.0966L8.346 20.5125ZM11.8607 22.2872C11.8565 22.2913 11.8523 22.2954 11.8483 22.2998L11.3224 22.8448C10.9795 23.1824 10.4256 23.1807 10.0847 22.8398C9.91633 22.6714 9.82229 22.4456 9.81981 22.2041C9.81733 21.9676 9.9045 21.749 10.0651 21.5882L10.651 21.0023C10.8074 20.8459 11.0104 20.7684 11.2179 20.7684C11.4449 20.7684 11.6774 20.8611 11.8605 21.0442C12.2032 21.387 12.2032 21.9445 11.8607 22.2872Z"
+                                    fill="#D8DCDE"></path></g><defs><clipPath id="clip0"><rect width="25" height="25"
+                                                                                               fill="white"></rect></clipPath></defs></svg></span>
+                <span class="uk-transport">Партнерам</span> </a>
+            <div data-uk-dropdown="mode: hover">
+                <div class="uk-container">
+                    <div class="uk-grid uk-grid-small" data-uk-grid="">
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/partners/airlines/">Авиакомпаниям</a></li>
+                            <li><a href="/partners/leasing/">Арендаторам</a></li>
+                            <li><a href="/partners/leasing/advertising/">Рекламодателям</a></li>
+                            <li><a href="/partners/cargo/">Грузоперевозчикам</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            
+                            <li><a href="/partners/meeting_rooms/">Переговорные комнаты</a></li>
+                            <li><a href="/partners/permits/">Выдача пропусков и согласований</a></li>
+                            <li><a href="/partners/dobrovolnoe-soobshchenie-po-bezopasnosti-poletov/">Добровольное
+                                    сообщение по безопасности полетов</a></li>
+                                    <li><a href="/partners/tenders/">Закупки</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/partners/non-aviation/">Неавиационные услуги</a></li>
+                            <li><a href="/partners/contacts/">Контакты</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li><a href="/about/"> <span class="uk-icon"><svg height="25" viewBox="0 0 512 512" width="25"
+                                                          xmlns="http://www.w3.org/2000/svg"><path
+                                d="m15 208h150c8.285156 0 15-6.714844 15-15v-90c0-8.285156-6.714844-15-15-15h-150c-8.285156 0-15 6.714844-15 15v90c0 8.285156 6.714844 15 15 15zm0 0"></path><path
+                                d="m497 482h-11v-164c0-8.285156-6.714844-15-15-15h-306v179h-30v-244h-90v244h-30c-8.285156 0-15 6.714844-15 15s6.714844 15 15 15h482c8.285156 0 15-6.714844 15-15s-6.714844-15-15-15zm-287.015625-131h231.03125c8.28125 0 15 6.714844 15 15s-6.71875 15-15 15h-231.03125c-8.285156 0-15-6.714844-15-15s6.714844-15 15-15zm0 60h231.03125c8.28125 0 15 6.714844 15 15s-6.71875 15-15 15h-231.03125c-8.285156 0-15-6.714844-15-15s6.714844-15 15-15zm0 0"></path><path
+                                d="m283.871094 164.773438c2.554687 5.046874 7.730468 8.230468 13.382812 8.230468h63.761719l-18.023437 26.925782c-4.609376 6.882812-2.765626 16.199218 4.117187 20.808593 2.566406 1.714844 5.464844 2.535157 8.332031 2.535157 4.835938 0 9.585938-2.335938 12.480469-6.65625l29.199219-43.613282h43.878906c8.285156 0 15-6.71875 15-15 0-8.285156-6.714844-15-15-15h-43.789062l-29.019532-43.347656c-4.609375-6.886719-13.925781-8.730469-20.8125-4.121094-6.882812 4.609375-8.726562 13.925782-4.117187 20.808594l17.847656 26.660156h-54.632813l-17.09375-33.777344c-3.738281-7.390624-12.765624-10.351562-20.15625-6.609374-7.390624 3.738281-10.351562 12.765624-6.609374 20.15625zm0 0"></path><path
+                                d="m135 44c0-8.285156-6.714844-15-15-15h-15v-14c0-8.285156-6.714844-15-15-15s-15 6.714844-15 15v14h-15c-8.285156 0-15 6.714844-15 15v14h90zm0 0"></path></svg></span>
+                <span class="uk-transport">Об аэропорте</span> </a>
+            <div data-uk-dropdown="mode: hover">
+                <div class="uk-container">
+                    <div class="uk-grid uk-grid-small" data-uk-grid="">
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/about/about_pulkovo/">Пулково</a></li>
+                            <li><a href="/about/press_center/">Пресс‑центр</a></li>
+                           <li><a href="/about/reports/">Раскрытие информации</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/about/sustainability/">Охрана окружающей среды</a></li>
+                            <li><a href="/about/safety/">Безопасность в аэропорту</a></li>
+                            <li><a href="/about/contacts/">Контакты</a></li>
+
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        </li>
+
+		<li><a href="/about/careers/"> <span class="uk-icon"><svg height="25" viewBox="0 0 31.24 28.8" width="25"
+                                                          xmlns="http://www.w3.org/2000/svg"> <path class="cls-1" d="M2.77,7.9v5c0,1.64,1.33,2.98,2.98,2.98h11.09c1.64,0,2.98-1.33,2.98-2.98v-5c.81-.59,1.29-1.52,1.29-2.52v-.75c0-1.2-.97-2.17-2.17-2.17h-3.57v-.7c0-.97-.79-1.75-1.75-1.75h-4.64c-.97,0-1.75.79-1.75,1.75v.7h-3.57c-1.19,0-2.17.98-2.17,2.17v.75c0,1,.48,1.93,1.28,2.52ZM8.96,2.45v-.7h.01s4.66,0,4.66,0v.7h-4.67ZM12.6,5.67h-2.62c-.48,0-.87.39-.87.87v.23h-4.5c-.76,0-1.39-.62-1.39-1.39v-.75c0-.24.19-.43.43-.43h15.28c.24,0,.43.19.43.43v.75c0,.76-.62,1.39-1.39,1.39h-4.51s0-.23,0-.23c0-.48-.39-.87-.87-.87ZM10.85,9.38v-1.98h.88v1.98h-.88ZM4.51,8.5s.07,0,.1,0h4.5v1.75c0,.48.39.87.87.87h2.62c.48,0,.87-.39.87-.87v-1.75h4.5s.07,0,.1,0v4.4c0,.68-.55,1.24-1.23,1.24H5.75c-.68,0-1.24-.55-1.24-1.24v-4.4Z"/>
+      <path class="cls-1" d="M30.37,15.56h-4.26v-2.32l3.73-2.34c.24-.15.39-.41.41-.69.01-.28-.11-.55-.33-.73l-4.14-3.28c-.26-.21-.62-.25-.92-.1-.3.15-.49.45-.49.78v8.67h-3.66c-.48,0-.87.39-.87.87v2.52h-10.57c-.48,0-.87.39-.87.87v2.46H.87c-.48,0-.87.39-.87.87v4.77c0,.48.39.87.87.87h29.5c.48,0,.87-.39.87-.87v-11.5c0-.48-.39-.87-.87-.87ZM26.1,11.18v-2.5l1.76,1.4-1.76,1.1ZM29.5,17.3v9.76H1.74v-3.03h7.53c.48,0,.87-.39.87-.87v-2.47h10.57c.48,0,.87-.39.87-.87v-2.52h7.92Z"/></svg></span>
+                <span class="uk-transport">Карьера</span> </a>
+            <div data-uk-dropdown="mode: hover">
+                <div class="uk-container">
+                    <div class="uk-grid uk-grid-small" data-uk-grid="">
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/about/careers/jobs/">Вакансии</a></li>
+                            <li><a href="/about/careers/students/">Практики и стажировки</a></li>
+							<li><a href="/about/careers/vzletnaya-polosa/">Проект «‎Взлётная полоса»‎</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/about/careers/corpculture/">Корпоративная культура</a></li>
+                            <li><a href="/about/careers/benefits/">Льготы и гарантии</a></li>
+  							<li><a href="/about/careers/social_policy/">Социальная ответственность‎</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/about/careers/faq/">Часто задаваемые вопросы</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li><a href="/atc/"> <span class="uk-icon"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"><path
+                                d="M19.6045 14.3555C17.1814 14.3555 15.21 16.3269 15.21 18.75C15.21 19.5707 15.4363 20.3394 15.8296 20.9973L13.494 23.3329C13.1127 23.7142 13.1127 24.3326 13.494 24.714C13.6847 24.9046 13.9346 25 14.1846 25C14.4345 25 14.6845 24.9046 14.8752 24.714L17.1775 22.4116C17.8734 22.8744 18.7079 23.1445 19.6045 23.1445C22.0276 23.1445 23.999 21.1731 23.999 18.75C23.999 16.3269 22.0276 14.3555 19.6045 14.3555ZM19.6045 21.1914C18.2583 21.1914 17.1631 20.0962 17.1631 18.75C17.1631 17.4038 18.2583 16.3086 19.6045 16.3086C20.9507 16.3086 22.0459 17.4038 22.0459 18.75C22.0459 20.0962 20.9507 21.1914 19.6045 21.1914Z"
+                                fill="#D8DCDE"></path><path
+                                d="M11.9873 19.1406H6.86035V4.88281C6.86035 4.34346 6.42314 3.90625 5.88379 3.90625C5.34443 3.90625 4.90723 4.34346 4.90723 4.88281V19.1406H3.93066C3.58833 19.1406 3.25977 19.2002 2.9541 19.3086V2.92969C2.9541 2.39121 3.39219 1.95312 3.93066 1.95312H20.0928V11.1328C20.0928 11.6722 20.53 12.1094 21.0693 12.1094C21.6087 12.1094 22.0459 11.6722 22.0459 11.1328V0.976562C22.0459 0.437207 21.6087 0 21.0693 0H3.93066C2.31523 0 1.00098 1.31426 1.00098 2.92969V22.0703C1.00098 23.6857 2.31523 25 3.93066 25H9.83887C10.3782 25 10.8154 24.5628 10.8154 24.0234C10.8154 23.4841 10.3782 23.0469 9.83887 23.0469H3.93066C3.39219 23.0469 2.9541 22.6088 2.9541 22.0703C2.9541 21.5318 3.39219 21.0938 3.93066 21.0938H11.9873C12.5267 21.0938 12.9639 20.6565 12.9639 20.1172C12.9639 19.5778 12.5267 19.1406 11.9873 19.1406Z"
+                                fill="#D8DCDE"></path></svg></span> <span class="uk-transport">Учебный центр</span></a>
+            <div data-uk-dropdown="mode: hover">
+                <div class="uk-container">
+                    <div class="uk-grid uk-grid-small" data-uk-grid="">
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/atc/about-educational/">Сведения об образовательной организации</a></li>
+                            <li><a href="/atc/course_catalog/">Каталог программ</a></li>
+                            <li><a href="/atc/for_drivers/">Подготовка водителей</a></li>
+                        </ul>
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="/atc/filing_an_application/">Подать заявку</a></li>
+                            <li><a href="/atc/contacts/">Контакты</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+<!--        
+        <li><a href="javascript:void(0);"> <span class="uk-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.8 26.5"
+                                                             height="25" width="24"><g id="Layer_2" data-name="Layer 2"><g
+                                    id="Layer_1-2" data-name="Layer 1"><path class="cls-1"
+                                                                             d="M8.18,10.56a.36.36,0,0,0-.37.37v.39a.37.37,0,0,0,.73,0v-.39A.36.36,0,0,0,8.18,10.56Z"></path><path
+                                        class="cls-1"
+                                        d="M12.87,10.56a.36.36,0,0,0-.36.37v.39a.37.37,0,0,0,.73,0v-.39A.36.36,0,0,0,12.87,10.56Z"></path><path
+                                        class="cls-1"
+                                        d="M8.48,9,6.91,9.4a.37.37,0,0,0,.09.72h.09l1.57-.39a.37.37,0,0,0,.26-.45A.36.36,0,0,0,8.48,9Z"></path><path
+                                        class="cls-1"
+                                        d="M12.13,9.27a.37.37,0,0,0,.26.45l1.57.39h.09a.37.37,0,0,0,.09-.72L12.57,9A.36.36,0,0,0,12.13,9.27Z"></path><path
+                                        class="cls-1"
+                                        d="M19.92,22l-4.06-1.27a.44.44,0,0,1-.32-.43V18.08l.14-.13a6.23,6.23,0,0,0,.76-.86,7.11,7.11,0,0,0,1.4-2.75,2.31,2.31,0,0,0,1.38-.69A2.25,2.25,0,0,0,19.84,12a2.22,2.22,0,0,0-.78-1.59V5a5,5,0,0,0-5-5H8.94A2.69,2.69,0,0,0,6.73,1.17H6.6A3.86,3.86,0,0,0,2.74,5v5.34a2.28,2.28,0,0,0,1.22,4,7.16,7.16,0,0,0,1.37,2.71,7.49,7.49,0,0,0,.79.9l.14.13v2.24a.44.44,0,0,1-.31.43L1.88,22A2.67,2.67,0,0,0,0,24.58v1.17a.76.76,0,0,0,.75.75h.74V24.58a1.17,1.17,0,0,1,.83-1.13l2.32-.73a7.79,7.79,0,0,0,12.36,0l2.39.74a1.2,1.2,0,0,1,.84,1.15v.31a1.83,1.83,0,0,0-.06.41c.06.41-.1.78,0,1.2h.55a1.12,1.12,0,0,0,1.11-1.12v-.8A2.66,2.66,0,0,0,19.92,22ZM7.35,2.66a.38.38,0,0,0,.26-.13.69.69,0,0,0,.25-.31A1.17,1.17,0,0,1,8.94,1.5H14a3.82,3.82,0,0,1,.68.07A3.55,3.55,0,0,1,17.5,5v5.51h-.42a.82.82,0,0,1-.81-.81v-2a1.92,1.92,0,0,0-1.93-1.93.37.37,0,1,0,0,.73,1.2,1.2,0,0,1,1.2,1.2v2a1.56,1.56,0,0,0,.78,1.34v1a.8.8,0,0,1-.8.8H6.12a.81.81,0,0,1-.81-.8v-1A1.55,1.55,0,0,0,6.1,9.73v-2a1.2,1.2,0,0,1,1.2-1.2h5.48a.37.37,0,0,0,0-.73H7.3A1.93,1.93,0,0,0,5.36,7.77v2a.81.81,0,0,1-.8.81H4.24V5A2.36,2.36,0,0,1,6.6,2.67h.75ZM3.86,11.41s.06-.06.09-.09a.87.87,0,0,1,.28-.05h.35v.81a1.56,1.56,0,0,0,.23.8H4.25A.79.79,0,0,1,3.46,12,.75.75,0,0,1,3.86,11.41Zm13,1.47a1.56,1.56,0,0,0,.23-.8v-.81h.35a.85.85,0,0,1,.87.76.81.81,0,0,1-.22.6,1,1,0,0,1-.27.19.86.86,0,0,1-.23,0h-.73ZM15,16.39A5.6,5.6,0,0,1,6.46,16a8.44,8.44,0,0,0,4.36,1.11,8.31,8.31,0,0,0,4.57-1.23Q15.22,16.15,15,16.39Zm1-1.94H9.25a.37.37,0,0,0,0,.73h5.9a7.47,7.47,0,0,1-4.33,1.23,7.47,7.47,0,0,1-4.33-1.23h1.2a.37.37,0,0,0,0-.73h-2a4.73,4.73,0,0,1-.18-.83H16.26A4.73,4.73,0,0,1,16.08,14.45ZM7.76,20.32V19A7.12,7.12,0,0,0,14,19v.31a.37.37,0,0,0-.07.2v.81a1.92,1.92,0,0,0,.74,1.52,5.49,5.49,0,0,1-7.73,0A2,2,0,0,0,7.76,20.32Zm6.3,3.91a7,7,0,0,1-3.24.79A7.11,7.11,0,0,1,5.4,22.49l.88-.27a6.24,6.24,0,0,0,9.12,0l.87.27A7,7,0,0,1,14.06,24.23Z"></path></g></g></svg></span>
+                <span class="uk-transport">Covid‑19</span> </a>
+            <div data-uk-dropdown="mode: hover">
+                <div class="uk-container">
+                    <div class="uk-grid uk-grid-small" data-uk-grid="">
+                        <ul class="uk-nav uk-dropdown-nav">
+-->                        
+                            <!-- <li><a href="/covid-19/">COVID‑19. Информация</a></li> -->
+<!--                            
+                            <li><a href="/covid-19-test/">Тестирование на COVID‑19</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+-->
+        <!-- <li>
+            <a href="/important/">
+									<span class="uk-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="25"
+                                             height="25"><path
+                                                    d="M 25 2 C 12.309295 2 2 12.309295 2 25 C 2 37.690705 12.309295 48 25 48 C 37.690705 48 48 37.690705 48 25 C 48 12.309295 37.690705 2 25 2 z M 25 4 C 36.609824 4 46 13.390176 46 25 C 46 36.609824 36.609824 46 25 46 C 13.390176 46 4 36.609824 4 25 C 4 13.390176 13.390176 4 25 4 z M 25 11 A 3 3 0 0 0 22 14 A 3 3 0 0 0 25 17 A 3 3 0 0 0 28 14 A 3 3 0 0 0 25 11 z M 21 21 L 21 23 L 22 23 L 23 23 L 23 36 L 22 36 L 21 36 L 21 38 L 22 38 L 23 38 L 27 38 L 28 38 L 29 38 L 29 36 L 28 36 L 27 36 L 27 21 L 26 21 L 22 21 L 21 21 z"/></svg>
+									</span>
+                <span class="uk-transport">Важная информация</span>
+            </a>
+        </li> -->
+<!--<li class="den-pobedy">-->
+<!--            <img src="/upload/den-pobedy/Pobeda80_logo_main.jpg" alt="80 лет дня Победы" class="den-pobedy__logo">-->
+<!--        </li>-->
+        <li class="exchange-return"><a href="/faq-flight-delay/"class="uk-button uk-button-secondary uk-button-large uk-width-medium@s">Обмен и возврат билетов</a></li>
+    </ul>
+</div>
+<br>
+					<div class="uk-navbar-item uk-padding-remove-horizontal uk-visible@m">
+						<span class="tm-navbar-divider"></span>
+					</div>
+				</div>
+				<style>
+					.burger {
+                        position: relative;
+                        display: inline-block;
+                        overflow: hidden;
+                        width: 24px;
+                        height: 24px;
+                        background: url('/images/burger2.png') no-repeat 0 0;
+                        background-size: cover;
+                        background-position: -48px 0px;
+                        transition: all 0.3s ease;
+                    }
+                    .burger span {
+                        position: absolute;
+                        width: 100%;
+                        height: 2px;
+                        background-color: #00081E;
+                        left: 0;
+                        top: 3px;
+                        transition: all 0.3s ease;
+                    }
+                    .burger span:nth-child(2) {
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+                    .burger span:nth-child(3) {
+                        bottom: 3px;
+                        top: auto;
+                    }
+
+                    .active > .burger {
+                        background-position: 0 0
+                    }
+
+                    .active > .burger span {
+                        left: 100%;
+                    }
+
+				</style>
+				<div class="uk-navbar-right uk-flex-right zero revealOnScroll fade" data-animation="fadeIn" data-timeout="0"
+					style="flex-wrap:nowrap;align-items: flex-start;">
+					<div class="uk-panel-mobile">
+						<a class="uk-navbar-toggle-mobile-my" href="#">
+							<span class="uk-m-toggle uk-icon myclass ">
+								<span class="burger">
+									<span></span>
+                                    <span></span>
+                                    <span></span> 
+								</span>
+							</span>
+						</a>
+					</div>
+					<div class="uk-desktop">
+						<a class="uk-navbar-toggle" href="#">
+							<span class="uk-icon">
+								<img src="/local/templates/pulkovo_index/main2/ddd.png" alt="" />
+							</span>
+							<span class="uk-margin-small-left">Поиск по сайту</span>
+						</a>
+						<div id="idMenu" class="" data-uk-dropdown="mode: click" data-uk-position="bottom" data-uk-alignment="right">
+							<div class="uk-container">
+								<div class="uk-margin">
+									<div class="uk-grid-large uk-child-width " data-uk-grid><!-- uk-child-width-1-2@l -->
+										<div class="uk-position-relative mb-long">
+											<form method="GET" action="/search.php">
+												<button type="submit" class="uk-form-icon uk-form-icon-flip uk-icon" data-uk-icon="icon: search"></button>
+												<input name="q" class="uk-input uk-form-large tm-form-thin" type="search" placeholder="Поиск по сайту" autocomplete="off">
+											<input type="hidden" name="csrftoken" value="000001a107299afbbe7654e533b3e0708453b9a92ef0d97db3203df0d018090cb37c52328af39a0c" /><input type="hidden" name="de8d1fee4dd1339057e5ed254a76f36b" value="7B227473223A31313330353830342C22686F7374223A222F616A61782F6F6E6C696E652F222C22706172616D73223A7B2263737266746F6B656E223A7B2263223A312C223030303030316131303732393961666262653736353465353333623365303730383435336239613932656630643937646233323033646630643031383039306362333763353233323861663339613063223A747275657D7D7D.00EB869BEEF7B6145AF41E6284001EA39FF1F83825424C39C37089B2BA144638" /></form>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</nav>
+<nav class="uk-navbar-mobile-my">
+    <div style="padding: 5px 10px;">
+        <div class="uk-navbar tm-navbar v2">
+            <div class="uk-navbar-left uk-flex-left flex-1 revealOnScroll fade" data-animation="fadeIn"
+                 data-timeout="0">
+                                            <div class="uk-navbar-right uk-flex-right revealOnScroll fade" data-animation="fadeIn" data-timeout="0"
+                 style="flex-wrap:nowrap;align-items: center;height: 51px;">
+                <ul class="tm-navbar-lang">
+                    <li class="mobile_special">
+                        <a style="position: relative;left: -11px;top: -3px;" href="/?special_version=Y"><img class="open_mibik_vers" src="/local/templates/pulkovo_index/images/open_eye.png"></a>
+                    </li>
+                    <li>
+                        <a class="notranslate" data-google-lang="ru">RU</a></li>
+                    <li>
+                        <a class="notranslate" data-google-lang="en">EN</a></li>
+                </ul>
+            </div>
+            <div class="uk-navbar-right uk-flex-right revealOnScroll fade" data-animation="fadeIn" data-timeout="0"
+                 style="flex-wrap:nowrap;align-items: center;height: 51px;">
+                <style>
+                    .icon-search {
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        background: url('/images/search.png') no-repeat 0 0;
+                        background-size: cover;
+                        position: relative;
+                    }
+
+                    .overhelp {
+                        padding: 5px;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .mobile-frm {
+                        /* position: relative; */
+                        margin: 0 0 0 20px;
+                    }
+
+                    .input-for-mobile {
+                        display: none;
+                        position: absolute;
+                        background: #f2f3f5;
+                        width: calc(100% + 20px);
+                        right: 0;
+                        padding: 0 10px !important;
+                        border: 0;
+                        top: 5px;
+                        height: 42px !important;
+                        border-radius: 3px;
+                        font-size: 15px !important;
+                    }
+
+                    .uk-input.input-for-mobile:focus {
+                        outline: none;
+                        background: #f2f3f5;
+                        color: #7e8185;
+                    }
+
+                </style>
+                                <form method="GET" action="/search.php" class="mobile-frm">
+                    <!-- <button type="submit" class="uk-form-icon uk-form-icon-flip uk-icon" data-uk-icon="icon: search"></button> -->
+                    <input name="q" class="uk-input uk-form-large tm-form-thin input-for-mobile" type="search"
+                           placeholder="Поиск по сайту" autocomplete="off"> <a href="#" class="overhelp"><span
+                                class="icon-search"></span></a>
+                <input type="hidden" name="csrftoken" value="000001a107299afbbe7654e533b3e0708453b9a92ef0d97db3203df0d018090cb37c52328af39a0c" /><input type="hidden" name="de8d1fee4dd1339057e5ed254a76f36b" value="7B227473223A31313330353830342C22686F7374223A222F616A61782F6F6E6C696E652F222C22706172616D73223A7B2263737266746F6B656E223A7B2263223A312C223030303030316131303732393961666262653736353465353333623365303730383435336239613932656630643937646233323033646630643031383039306362333763353233323861663339613063223A747275657D7D7D.00EB869BEEF7B6145AF41E6284001EA39FF1F83825424C39C37089B2BA144638" /></form>
+            </div>
+        </div>
+    </div>
+    <ul class="uk-navbar-navmob navmob__list " style="display: block">
+        <li class="uk-position-relative"><a href="/passengers/">Пассажирам</a>
+            <div class=" uk-position-abs drop__link">
+                <span class="icosub " role="presentation"> </span>
+            </div>
+            <div class="navmob__list">
+                <ul style="padding-left: 10px">
+                    <li><a href="/passengers/departure/">Табло рейсов</a></li>
+                    <li><a href="/passengers/passenger_registration/">Регистрация пассажиров</a></li>
+                    <li><a href="/passengers/baggage/">Багаж</a></li>
+                    <li><a href="/passengers/security/">Досмотр и контроль</a></li>
+                    <li><a href="/passengers/map/">Схема аэропорта</a></li>
+                    <li><a href="/passengers/destinations/flight_schedule/">Расписание</a></li>
+                    <li><a href="/passengers/shuttle/">Шаттлы Петербург–Москва</a></li>
+                    <li><a href="/passengers/destinations/airlines/">Авиакомпании</a></li>
+                    <li><a href="/passengers/services/">Услуги</a></li>
+                    <li><a href="/passengers/cards-foreign/">Банковские карты для иностранцев</a></li>
+                    <li><a href="/passengers/pulkovo_children/">Пассажирам с детьми</a></li>
+                    <li><a href="/passengers/prm/">Пассажирам особых категорий</a></li>
+                    <li><a href="/passengers/animals-plants/">Пассажирам с животными и растениями</a></li>
+                    <li><a href="/passengers/contact-us/">Обратная связь</a></li>
+                    <li><a href="/passengers/faq/">Вопросы и ответы</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="uk-position-relative"><a href="/transport/">Транспорт и парковки</a>
+            <div class=" uk-position-abs drop__link">
+                <span class="icosub " role="presentation"> </span>
+            </div>
+            <div class="navmob__list">
+                <ul style="padding-left: 10px">
+                    <li><a href="/transport/#parking-legend__title">Парковочный комплекс</a></li>
+                    <li><a href="/transport/#public-transport__title">Общественный транспорт</a></li>
+                    <li><a href="/transport/#taxi__title">Такси</a></li>
+                    <li><a href="/transport/#kashering__title">Каршеринг</a></li>
+                    <li><a href="#passengers-disabilities__title">Пассажирам с инвалидностью</a></li>
+                                        <!-- <li><a href="/transport/kak-oplatit-parkovku/">Как оплатить парковку</a></li> -->
+                                                        </ul>
+            </div>
+        </li>
+        <li class="uk-position-relative"><a href="/partners/">Партнерам</a>
+            <div class=" uk-position-abs drop__link">
+                <span class="icosub " role="presentation"> </span>
+            </div>
+            <div class="navmob__list">
+                <ul style="padding-left: 10px">
+                    <li><a href="/partners/airlines/">Авиакомпаниям</a></li>
+                    <li><a href="/partners/leasing/">Арендаторам</a></li>
+                    <li><a href="/partners/leasing/advertising/">Рекламодателям</a></li>
+                    <li><a href="/partners/cargo/">Грузоперевозчикам</a></li>
+                    <li><a href="/partners/meeting_rooms/">Переговорные комнаты</a></li>
+                    <li><a href="/partners/permits/">Выдача пропусков и согласований</a></li>
+                    <li><a href="/partners/dobrovolnoe-soobshchenie-po-bezopasnosti-poletov/">Добровольное сообщение по
+                            безопасности полетов</a></li>
+                    <li><a href="/partners/tenders/">Закупки</a></li>
+                    <li><a href="/partners/non-aviation/">Неавиационные услуги</a></li>
+                    <li><a href="/partners/contacts/">Контакты</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="uk-position-relative"><a href="/about/">Об аэропорте</a>
+            <div class=" uk-position-abs drop__link">
+                <span class="icosub " role="presentation"> </span>
+            </div>
+            <div class="navmob__list">
+                <ul style="padding-left: 10px">
+                    <li><a href="/about/about_pulkovo/">О Пулково</a></li>
+                    <li><a href="/about/careers/">Карьера</a></li>
+                    <li><a href="/about/press_center/">Пресс‑центр</a></li>
+                    <li><a href="/about/reports/">Раскрытие информации</a></li>
+                    <li><a href="/about/sustainability/">Охрана окружающей среды</a></li>
+                    <li><a href="/about/contacts/">Контакты</a></li>
+                    <li><a href="/about/safety/">Безопасность в аэропорту</a></li>
+                    <li><a href="/about/analytics-research/">Аналитика и исследования</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="uk-position-relative"><a href="/about/careers/">Карьера</a>
+            <div class=" uk-position-abs drop__link">
+                <span class="icosub " role="presentation"> </span>
+            </div>
+            <div class="navmob__list">
+                <ul style="padding-left: 10px">
+                    <li><a href="/about/careers/jobs/">Вакансии</a></li>
+                    <li><a href="/about/careers/students/">Практики и стажировки</a></li>
+                    <li><a href="/about/careers/vzletnaya-polosa/">Проект "Взлетная полоса"</a></li>
+                    <li><a href="/about/careers/corpculture/">Корпоративная культура</a></li>
+                    <li><a href="/about/careers/benefits/">Льготы и гарантии</a></li>
+                    <li><a href="/about/careers/social_policy/">Социальная ответственность</a></li>
+                    <li><a href="/about/careers/faq/">Часто задаваемые вопросы</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="uk-position-relative"><a href="/atc/">Авиационный учебный центр</a>
+            <div class=" uk-position-abs drop__link">
+                <span class="icosub " role="presentation"> </span>
+            </div>
+            <div class="navmob__list">
+                <ul style="padding-left: 10px">
+                    <li><a href="/atc/about-educational/">Сведения об образовательной организации</a></li>
+                    <li><a href="/atc/course_catalog/">Каталог программ</a></li>
+                    <li><a href="/atc/for_drivers/">Подготовка водителей</a></li>
+                    <li><a href="/atc/filing_an_application/">Подать заявку</a></li>
+                    <li><a href="/atc/contacts/">Контакты</a></li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="uk-position-relative"><a href="#">Контакты</a>
+
+            <div class="navmob__list" style="display: block !important;">
+                <div class="dropdown-content dropdown__contacts--content">
+
+                    <div class="dropdown__contacts--box">
+                       <!-- <a href="https://t.me/OfficialPulkovoBot">Телеграм-бот</a> -->
+                        <a href="/passengers/contact-us/">Обратная связь</a>
+                    </div>
+
+                    <div class="dropdown__contacts--box">
+                        <span class="dropdown__contacts--descr">Общие вопросы круглосуточно</span>
+                        <a href="tel:78123243000">+7 (812) 324-30-00</a>
+                        <a href="tel:78123373444">+7 (812) 337-34-44</a>
+                    </div>
+
+                    <div class="dropdown__contacts--box">
+                                <span class="dropdown__contacts--descr">
+                                    По вопросам неприбытия багажа и забытых вещей с 08:00 до 20:00
+                                </span>
+                        <a href="tel:78123373822">+7 (812) 337-38-22</a>
+                    </div>
+
+                    <div class="dropdown__contacts--box">
+                        <a href="/passengers/destinations/airlines/">Контакты авиакомпаний</a>
+                        <a href="/partners/contacts/">Контакты для партнеров</a>
+                    </div>
+
+                    <div class="dropdown__contacts--box">
+                        <ul class="uk-iconnav uk-flex-center tm-footer-social tm-footer-muted dropdown__contacts--social">
+
+                        <li style="padding-left:0;">
+                                <a target="_blank"
+                                   href="https://max.ru/pulkovo_led"
+                                   data-uk-icon1="icon: telegram; ratio: 1.8"
+                                   class="uk-icon"
+                                   style="margin-bottom: -4px;">
+                                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.70413 18.9458C7.83952 18.9458 6.973 18.6724 5.46679 17.5788C4.51407 18.8091 1.49713 19.7705 1.36556 18.1256C1.36556 16.8908 1.09336 15.8474 0.784858 14.7083C0.417382 13.3049 0 11.742 0 9.47745C0 4.06892 4.4188 0 9.65422 0C14.8942 0 18.9999 4.26941 18.9999 9.52757C19.0175 14.7044 14.8585 18.9182 9.70413 18.9458ZM9.78125 4.67493C7.23159 4.5428 5.24449 6.31526 4.80443 9.09471C4.44148 11.3957 5.08571 14.1979 5.63465 14.3438C5.89778 14.4075 6.56015 13.8699 6.973 13.4552C7.65566 13.9289 8.45061 14.2134 9.27767 14.28C11.9195 14.4076 14.1769 12.3876 14.3543 9.73717C14.4576 7.08113 12.4235 4.83148 9.78125 4.67949L9.78125 4.67493Z" fill="#A5AFB5"/>
+</svg>
+                                </a>
+                            </li>
+
+                                                        <li>
+                                <a target="_blank"
+                                   href="https://vk.com/pulkovo_led"
+                                   data-uk-icon1="icon: vk; ratio: 1.5"
+                                   class="uk-icon">
+    <svg width="30" height="19" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0C0.243598 11.8679 6.08985 19 16.3397 19H16.9208V12.2102C20.6872 12.5906 23.5351 15.3864 24.6781 19H30C28.5384 13.5986 24.6969 10.6126 22.2984 9.47147C24.6969 8.06406 28.0698 4.64064 28.8755 0H24.0409C22.9916 3.76577 19.8814 7.18919 16.9208 7.51251V0H12.0861V13.1612C9.08798 12.4004 5.30294 8.71071 5.13429 0H0Z" fill="#A5AFB5"/>
+</svg>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a target="_blank"
+                                   href="http://zen.yandex.ru/id/62289ed35b283f7ef4dd5b31"
+                                   data-uk-icon1="icon: zen; ratio: 1.5"
+                                   class="_uk-icon">
+     <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 9.12C0 4.82077 0 2.67119 1.33559 1.33559C2.67119 1.13249e-07 4.82078 0 9.12 0H9.21529C9.16746 3.85116 8.90459 6.01572 7.46015 7.46014C6.01571 8.90461 3.85118 9.1675 0 9.2153V9.12ZM0 9.7847V9.88C0 14.1792 0 16.3288 1.33559 17.6644C2.67119 19 4.82078 19 9.12 19H9.21529C9.16746 15.1488 8.90459 12.9843 7.46015 11.5399C6.01571 10.0954 3.85118 9.83256 0 9.7847ZM9.78471 19H9.88C14.1792 19 16.3288 19 17.6644 17.6644C19 16.3288 19 14.1792 19 9.88V9.7847C15.1488 9.83256 12.9843 10.0954 11.5398 11.5399C10.0954 12.9843 9.83254 15.1488 9.78471 19ZM19 9.2153V9.12C19 4.82077 19 2.67119 17.6644 1.33559C16.3288 1.13249e-07 14.1792 0 9.88 0H9.78471C9.83254 3.85116 10.0954 6.01572 11.5398 7.46014C12.9843 8.90461 15.1488 9.16744 19 9.2153Z" fill="#A5AFB5"/>
+</svg>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a target="_blank"
+                                   href="https://ok.ru/airportpulkovo"
+                                   data-uk-icon1="icon: odnoklassniki; ratio: 1.5"
+                                   class="uk-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                         viewBox="0 0 20 20" data-svg="odnoklassniki">
+                                        <path d="M10,3.12A2.11,2.11,0,1,1,7.89,5.23,2.11,2.11,0,0,1,10,3.12Zm0,7.2A5.09,5.09,0,1,0,4.9,5.23,5.1,5.1,0,0,0,10,10.33Z"></path>
+                                        <path d="M12.06,14.49a9.54,9.54,0,0,0,3-1.23,1.49,1.49,0,0,0-1.59-2.53,6.47,6.47,0,0,1-6.86,0A1.49,1.49,0,0,0,5,13.26a9.56,9.56,0,0,0,3,1.23L5.09,17.33A1.49,1.49,0,0,0,7.2,19.44l2.8-2.8,2.8,2.8a1.49,1.49,0,0,0,2.11-2.11l-2.85-2.85"></path>
+                                    </svg>
+                                </a>
+                            </li>
+
+                                                    </ul>
+                    </div>
+
+                </div>
+            </div>
+        </li>
+
+<!--        
+        <li class="uk-position-relative"><a href="javascript:void(0);">Covid‑19</a>
+            <div class=" uk-position-abs drop__link">
+                <span class="icosub " role="presentation"> </span>
+            </div>
+            <div class="navmob__list">
+                <ul style="padding-left: 10px">
+-->                
+                    <!-- <li><a href="/covid-19/">COVID‑19. Информация</a></li> -->
+<!--                    
+                    <li><a href="/covid-19-test/">Тестирование на COVID‑19</a></li>
+                </ul>
+            </div>
+        </li>
+-->        
+        <!-- <li class="uk-position-relative">
+            <a href="/important/">Важная информация</a>
+        </li> -->
+            </ul>
+</nav>
+<!--div class="new-panel-mobile uk-background-cover uk-background-center-center uk-background-norepeat uk-background-image" data-src="images/mob-bg.jpg" data-uk-img>
+	<div class="">
+		<img class="npm-logo revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="400" src="images/logo.svg" alt="" data-uk-svg>
+		<div class="npm-title revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="800">Добро пожаловать в Аэропорт Пулково</div>
+	</div>
+</div-->
+
+
+<div class="exchange-return exchange-return__mob"><a href="/faq-flight-delay/"class="uk-button uk-button-secondary uk-button-large uk-width-medium@s">Обмен и возврат билетов</a></div>
+
+ <div class="uk-section tm-section-breadcrumb uk-section-xsmall" >
+<div class="uk-container uk-container-expand1 revealOnScroll fade animated fadeInLeft" data-animation="fadeInLeft" data-timeout="200"><ul class="uk-breadcrumb"><li><span>Главная</span></li></ul></div></div>
+
+<div class="uk-padding-remove-bottom">
+	<div class="uk-section uk-section-secondary uk-background-cover uk-background-center-center uk-background-norepeat hideblock" data-src="/images/content/dark-1600-400/Обратная связь new.jpg" data-uk-img="" data-uk-parallax="bgx: 200; media: (max-width: 639px)">
+		<div class="uk-container">
+			<div class="uk-height-medium  uk-flex uk-flex-middle revealOnScroll fade" data-animation="fadeInLeft" data-timeout="500">
+				<div class="uk-width-1-2@l">
+					<h1 class="uk-h2">Нашли ошибку?</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<div class="uk-section uk-section-default uk-section-small revealOnScroll fade" data-animation="fadeIn" data-timeout="500" style="padding-top: 0px;">
+		<div class="uk-container">
+			<div class="uk-card uk-card-default tm-card-tabs">
+				<div class="uk-card-body ">
+				<div id="comp_b215c743a54a05690c7878f7f002c6fb">
+
+
+
+<form name="founderror" action="/ajax/online/" method="POST" enctype="multipart/form-data"><input type="hidden" name="bxajaxid" id="bxajaxid_b215c743a54a05690c7878f7f002c6fb_8BACKi" value="b215c743a54a05690c7878f7f002c6fb" /><input type="hidden" name="AJAX_CALL" value="Y" /><input type="hidden" name="sessid" id="sessid" value="d26f474c462ddc01ed77264aa15ecc11" /><input type="hidden" name="WEB_FORM_ID" value="14" />
+
+
+
+
+
+
+
+<div class="mb-long">
+	<h4 class="uk-h41 mb-supershort revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500">
+		Как вас зовут?</h4>
+				 <input
+		name="form_text_71" type="text"
+		class="uk-input uk-form-small revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500"
+		placeholder="Ваше имя" required=""
+	>
+</div>
+
+<div class="mb-long">
+	<h4 class="uk-h41 mb-supershort revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500">
+		Какие изменения необходимо внести на сайте, на ваш взгляд?</h4>
+				 <input
+		name="form_text_72" type="text"
+		class="uk-input uk-form-small revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500"
+		placeholder="Напишите ответ" required=""
+	>
+</div>
+
+<div class="mb-long">
+	<h4 class="uk-h41 mb-supershort revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500">
+		Ссылка на раздел сайта, в котором необходимо внести изменения</h4>
+				 <input
+		name="form_url_73" type="text"
+		class="uk-input uk-form-small revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500"
+		placeholder="Укажите ссылку" >
+</div>
+
+<div class="mb-long">
+	<h4 class="uk-h41 mb-supershort revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500">
+		Контактный email или телефон для связи с вами</h4>
+				 <input
+		name="form_text_74" type="text"
+		class="uk-input uk-form-small revealOnScroll fade" data-animation="fadeInUpSmall" data-timeout="500"
+		placeholder="E-mail или телефон" >
+</div>
+
+<tr>
+	<th colspan="2"><b>Защита от автоматического заполнения</b></th>
+</tr>
+<tr>
+	<td></td>
+	<td><div class="g-recaptcha" data-sitekey="6LdAqusbAAAAADl348F0H_oA9fndCXq75y_5oNDk"></div><div class="text-danger" id="recaptchaError"></div></td>
+</tr>
+</tbody>
+<br>
+<div class="uk-position-relative revealOnScroll fade animated fadeInUpSmall" data-animation="fadeInUpSmall"
+	data-timeout="500"> 
+	<input type="text" id="rfio" name="fio" value="" placeholder="Ваша фамилия" />
+	<label for="r1311" class="ml-auto"> 
+		<input type="checkbox" id="r1311" name="rr11"
+			class="uk-radio default-radio small" required=""> <span
+			class="uk-text-small uk-text-emphasis user-noselect"><b> <a href="pulkovo_vip_pd.pdf" target="_blank"
+					download="download">Согласие на обработку персональных данных</a> </b></span> </label> </div>
+<div class="mb-short3 uk-textalign-center">
+	<input class="uk-button uk-button-strobed uk-button-small uk-text-uppercase uk-margin-10"
+		 type="submit" name="web_form_submit"
+		value="Отправить" />
+</div>
+
+
+</table>
+
+<input type="hidden" name="csrftoken" value="000001a107299afbbe7654e533b3e0708453b9a92ef0d97db3203df0d018090cb37c52328af39a0c" /><input type="hidden" name="de8d1fee4dd1339057e5ed254a76f36b" value="7B227473223A31313330353830342C22686F7374223A222F616A61782F6F6E6C696E652F222C22706172616D73223A7B225745425F464F524D5F4944223A7B2263223A312C223134223A747275657D2C226278616A61786964223A7B2263223A312C226232313563373433613534613035363930633738373866376630303263366662223A747275657D2C22414A41585F43414C4C223A7B2263223A312C2259223A747275657D2C2263737266746F6B656E223A7B2263223A312C223030303030316131303732393961666262653736353465353333623365303730383435336239613932656630643937646233323033646630643031383039306362333763353233323861663339613063223A747275657D2C22736573736964223A7B2263223A312C226432366634373463343632646463303165643737323634616131356563633131223A747275657D7D7D.A8805EF5CC0DFDB3832DF135BE05809285B0B96C187B3F92B5E0BC73924EC50E" /></form>
+</div>				
+					
+					
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="uk-position-bottom-right uk-position-small uk-pos-margin-short uk-position-fixed z-index-2">
+   <a class="uk-button uk-button-secondary tm-button-totop uk-visible@s tel-fixed" href="tel:+78123373822">
+   <img src="/images/content/mini.png" alt="">
+ </a>
+</div><div class="uk-hidden@s uk-section uk-section-small revealOnScroll fade" data-animation="fadeIn" data-timeout="500">
+	<div class="uk-container">
+		<div class="uk-position-relative">
+			<form method="GET" action="search.php">
+				<button type="submit" class="uk-form-icon dark uk-form-icon-flip uk-icon" data-uk-icon="icon: search"></button>
+				<input name="q" class="uk-input dark uk-form-large tm-form-thin" type="search" placeholder="Поиск по сайту">
+			<input type="hidden" name="csrftoken" value="000001a107299afbbe7654e533b3e0708453b9a92ef0d97db3203df0d018090cb37c52328af39a0c" /><input type="hidden" name="de8d1fee4dd1339057e5ed254a76f36b" value="7B227473223A31313330353830342C22686F7374223A222F616A61782F6F6E6C696E652F222C22706172616D73223A7B2263737266746F6B656E223A7B2263223A312C223030303030316131303732393961666262653736353465353333623365303730383435336239613932656630643937646233323033646630643031383039306362333763353233323861663339613063223A747275657D7D7D.00EB869BEEF7B6145AF41E6284001EA39FF1F83825424C39C37089B2BA144638" /></form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+<div class="uk-section uk-section-default" style="padding: 0 !important;flex-grow: 1;"></div>
+<div class="uk-section uk-section-small uk-light tm-footer " style="padding-bottom: 0;">
+	<div class="uk-container">
+		<style>
+			@media (max-width: 640px){
+				.mobi-fix-img{
+					width: 130px !important;
+				}
+				.mobi-fix-img.v2{
+					width: 100px !important;
+				}
+				.mobi-fix-img.v3{
+					width: 210px !important;
+				}
+			}
+		</style>
+		<div class="uk-margin uk-text-center">
+							<img class="mobi-fix-img v3" src="/local/templates/pulkovo_main/images/logo-f-pulkovo-ru.svg" width="296" height="82" alt="">
+						&nbsp;
+		</div>
+
+		<!--div class="uk-margin">
+			<ul class="tm-footer-nav uk-flex-center">
+				<li><a href="/passengers/">Пассажирам</a></li>
+				<li><a href="/partners/">Партнерам</a></li>
+				<li><a href="/atc/">Учебный центр</a></li>
+				<li><a href="/about/">Об аэропорте</a></li>
+			</ul>
+		</!--div-->
+		<hr class="uk-margin-remove tm-footer-muted">
+
+		<div class="uk-margin">
+			<div class="uk-grid-medium uk-child-width-1-3@m uk-flex-middle uk-text-center uk-text-left@m" data-uk-grid>
+				<div class="uk-visible@s ">
+					<ul class="uk-subnav tm-footer-muted tm-footer-nav-sub uk-flex-center uk-flex-left@m" data-uk-margin>
+						<li><a href="/passengers/contact-us/">Обратная связь</a></li>
+						<li><a href="/docs/files/agreement/Forma_soglasiya_PD.pdf">Политика конфиденциальности</a></li>
+						<li><a href="/about/careers/">Карьера</a></li>
+					</ul>
+				</div>
+				<div>
+				<ul class="uk-iconnav uk-flex-center tm-footer-social tm-footer-muted">
+					<li style="padding-left:0;"><a target="_blank" href="https://max.ru/pulkovo_led" data-uk-icon1="icon: max; ratio: 1.8" class="uk-icon">
+						<svg width="25" height="25" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.70413 18.9458C7.83952 18.9458 6.973 18.6724 5.46679 17.5788C4.51407 18.8091 1.49713 19.7705 1.36556 18.1256C1.36556 16.8908 1.09336 15.8474 0.784858 14.7083C0.417382 13.3049 0 11.742 0 9.47745C0 4.06892 4.4188 0 9.65422 0C14.8942 0 18.9999 4.26941 18.9999 9.52757C19.0175 14.7044 14.8585 18.9182 9.70413 18.9458ZM9.78125 4.67493C7.23159 4.5428 5.24449 6.31526 4.80443 9.09471C4.44148 11.3957 5.08571 14.1979 5.63465 14.3438C5.89778 14.4075 6.56015 13.8699 6.973 13.4552C7.65566 13.9289 8.45061 14.2134 9.27767 14.28C11.9195 14.4076 14.1769 12.3876 14.3543 9.73717C14.4576 7.08113 12.4235 4.83148 9.78125 4.67949L9.78125 4.67493Z" fill="#A5AFB5"/>
+</svg>
+					</a></li>
+
+						
+						<!-- <li style="padding-left:0;"><a target="_blank" href="https://t.me/OfficialPulkovoBot" data-uk-icon1="icon: telegram; ratio: 1.8" class="uk-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 224.87999 225" version="1.2" data-svg="telegram"><defs><clipPath id="clip1"><path d="M 47.046875 55.117188 L 177.476562 55.117188 L 177.476562 169.804688 L 47.046875 169.804688 Z M 47.046875 55.117188 "></path></clipPath></defs><g id="surface1"><g clip-path="url(#clip1)" clip-rule="nonzero"><path d="M 78.484375 121.570312 L 94.679688 162.140625 L 115.765625 141.011719 L 151.917969 169.808594 L 177.371094 55.117188 L 47.152344 109.472656 Z M 140.160156 88.023438 L 100.304688 124.453125 L 95.339844 143.203125 L 86.167969 120.222656 Z M 140.160156 88.023438 "></path></g></g></svg>Telegram&#8209бот</a></li> -->
+						<li><a target="_blank" href="https://vk.com/pulkovo_led" data-uk-icon1="icon: vk; ratio: 1.5" class="uk-icon">
+<svg width="38" height="38" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0C0.243598 11.8679 6.08985 19 16.3397 19H16.9208V12.2102C20.6872 12.5906 23.5351 15.3864 24.6781 19H30C28.5384 13.5986 24.6969 10.6126 22.2984 9.47147C24.6969 8.06406 28.0698 4.64064 28.8755 0H24.0409C22.9916 3.76577 19.8814 7.18919 16.9208 7.51251V0H12.0861V13.1612C9.08798 12.4004 5.30294 8.71071 5.13429 0H0Z" fill="#A5AFB5"/>
+</svg>
+						</a></li>
+
+						<li><a target="_blank" href="http://zen.yandex.ru/id/62289ed35b283f7ef4dd5b31" data-uk-icon1="icon: zen; ratio: 1.5" class="_uk-icon">
+						<svg width="30" height="30" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 9.12C0 4.82077 0 2.67119 1.33559 1.33559C2.67119 1.13249e-07 4.82078 0 9.12 0H9.21529C9.16746 3.85116 8.90459 6.01572 7.46015 7.46014C6.01571 8.90461 3.85118 9.1675 0 9.2153V9.12ZM0 9.7847V9.88C0 14.1792 0 16.3288 1.33559 17.6644C2.67119 19 4.82078 19 9.12 19H9.21529C9.16746 15.1488 8.90459 12.9843 7.46015 11.5399C6.01571 10.0954 3.85118 9.83256 0 9.7847ZM9.78471 19H9.88C14.1792 19 16.3288 19 17.6644 17.6644C19 16.3288 19 14.1792 19 9.88V9.7847C15.1488 9.83256 12.9843 10.0954 11.5398 11.5399C10.0954 12.9843 9.83254 15.1488 9.78471 19ZM19 9.2153V9.12C19 4.82077 19 2.67119 17.6644 1.33559C16.3288 1.13249e-07 14.1792 0 9.88 0H9.78471C9.83254 3.85116 10.0954 6.01572 11.5398 7.46014C12.9843 8.90461 15.1488 9.16744 19 9.2153Z" fill="#A5AFB5"/>
+</svg>
+						</a></li>
+
+						<li><a target="_blank" href="https://ok.ru/airportpulkovo" data-uk-icon1="icon: odnoklassniki; ratio: 1.5" class="uk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" data-svg="odnoklassniki"><path d="M10,3.12A2.11,2.11,0,1,1,7.89,5.23,2.11,2.11,0,0,1,10,3.12Zm0,7.2A5.09,5.09,0,1,0,4.9,5.23,5.1,5.1,0,0,0,10,10.33Z"></path><path d="M12.06,14.49a9.54,9.54,0,0,0,3-1.23,1.49,1.49,0,0,0-1.59-2.53,6.47,6.47,0,0,1-6.86,0A1.49,1.49,0,0,0,5,13.26a9.56,9.56,0,0,0,3,1.23L5.09,17.33A1.49,1.49,0,0,0,7.2,19.44l2.8-2.8,2.8,2.8a1.49,1.49,0,0,0,2.11-2.11l-2.85-2.85"></path></svg></a></li>
+											</ul>
+				</div>
+				<div class="uk-text-right@m uk-text-center">
+					<a href="tel:+78123242400" class="uk-text-nowrap">+7 (812) 324-30-00 - общие вопросы круглосуточно</a><br>
+					<!-- <a href="tel:+78123373822" class="uk-text-nowrap">+7 (812) 337-38-22</a><br> -->
+					<!--span class="tm-footer-muted uk-margin-small-left uk-margin-small-right">/</span-->
+					<!--<a href="tel:+78123373444" class="uk-text-nowrap">+7 (812) 337-34-44 – общие вопросы круглосуточно</a>-->
+                                        <a href="tel:+78123373822" class="uk-text-nowrap">+7 (812) 337-38-22 – по вопросам неприбытия <br>багажа и забытых вещей с 08:00 до 20:00</a><br>
+				</div>
+			</div>
+		</div>
+
+		<hr class="uk-margin-remove tm-footer-muted">
+		<style>
+			.main-fl-for-banner{
+				display:flex;
+				align-items: center;
+			}
+			.first-col-for-banner{
+				flex: auto;
+			}
+			.first-col-for-banner > .uk-margin{
+				margin-top: 20px
+			}
+			@media (max-width: 960px) {
+				.sec-col-for-banner {
+					display: none !important
+				}
+			}
+			.margin-bottom-20{
+				margin-bottom: 20px;
+			}
+		</style>
+		<div class="main-fl-for-banner">
+			<div class="first-col-for-banner">
+				<div class="uk-margin">
+					<ul class="uk-subnav tm-footer-muted tm-footer-nav-sub uk-flex-center uk-flex-left@m" data-uk-margin>
+						<li><a href="/about/reports/">Раскрытие информации</a></li>
+						<li><a href="/upload/PDP_2025_7.pdf">Политика конфиденциальности</a></li>
+						<li><a href="/sitemap/">Карта сайта</a></li>
+					</ul>
+					<p class="uk-visible@m">© 2026 «Воздушные Ворота Северной Столицы»</p>
+				</div>
+				<div class="uk-text-center uk-hidden@m margin-bottom-20" >
+					<span>Разработка сайта&nbsp;</span>
+					<a target="_blank" href="http://www.artwell.ru/">
+						<img src="/images/artwell_logo.png" width="100px" alt="">
+					</a>
+				</div>
+				<div class="uk-text-center uk-hidden@m margin-bottom-20">© 2026 «Воздушные Ворота Северной Столицы»</div>
+			</div>
+			<div class="sec-col-for-banner">
+				<span>Разработка сайта&nbsp;</span>
+				<a target="_blank" href="http://www.artwell.ru/">
+					<img src="/images/artwell_logo.png" width="100px" alt="">
+				</a>
+			</div>
+		</div>
+
+		<!-- Subscribe Panel START -->
+				<div class="subscribe-panel ">
+			<button class="subscribe-panel__toggle" type="button">Подпишитесь на рассылку</button>
+			<form id="subscribe-form" class="subscribe-panel__form" action="#" name="subscribe">
+				<div class="subscribe-panel__form-content">
+					<div class="subscribe-panel__form-title">Подпишитесь на рассылку и&nbsp;узнавайте о новостях и акциях</div>
+					<div class="subscribe-panel__form-input">
+						<input type="email" name="email" placeholder="Email" required />
+					</div>
+					<div class="subscribe-panel__form-submit">
+						<button class="subscribe-btn" type="submit">Подписаться</button>
+					</div>
+				</div>
+				<button class="subscribe-panel__form-close" type="button"></button>
+			<input type="hidden" name="csrftoken" value="000001a107299afbbe7654e533b3e0708453b9a92ef0d97db3203df0d018090cb37c52328af39a0c" /><input type="hidden" name="de8d1fee4dd1339057e5ed254a76f36b" value="7B227473223A31313330353830342C22686F7374223A222F616A61782F6F6E6C696E652F222C22706172616D73223A7B2263737266746F6B656E223A7B2263223A312C223030303030316131303732393961666262653736353465353333623365303730383435336239613932656630643937646233323033646630643031383039306362333763353233323861663339613063223A747275657D7D7D.00EB869BEEF7B6145AF41E6284001EA39FF1F83825424C39C37089B2BA144638" /></form>
+		</div>
+
+		<div id="subscribe-modal" class="subscribe-modal">
+			<div class="subscribe-modal__content">
+				<div class="subscribe-modal__title">Вы успешно подписались!</div>
+				<div class="subscribe-modal__btn">
+					<button class="subscribe-btn subscribe-btn--fill" onclick="$.fancybox.close();">Закрыть</button>
+				</div>
+			</div>
+		</div>
+
+		
+		<style>
+			.subscribe-panel {
+				display: flex;
+				justify-content: flex-end;
+				position: fixed;
+				right: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 999;
+				box-sizing: border-box;
+			}
+
+			.subscribe-panel * {
+				box-sizing: border-box;
+			}
+
+			.subscribe-panel__toggle {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 257px;
+				height: 42px;
+				margin-top: -70%;
+				padding: 10px 15px;
+				border: none;
+				border-radius: 4px 4px 0 0;
+				background-color: #00081E;
+				color: #fff;
+				white-space: nowrap;
+				cursor: pointer;
+				text-align: center;
+				transform: rotate(-90deg);
+				transform-origin: 100% 100%;
+				font-size: 16px;
+				font-weight: 700;
+				line-height: 1.2;
+				outline: none;
+				transition: 0.3s;
+			}
+
+			.subscribe-panel__form {
+				width: 100vw;
+				max-width: 408px;
+				padding: 31px 78px 33px 30px;
+				position: absolute;
+				right: 0;
+				top: 50%;
+				transform: translateY(-54%) translateX(100%);
+				z-index: 10;
+				border-radius: 4px 0 0 4px;
+				background-color: #00081E;
+				color: #fff;
+				transition: 0.3s;
+			}
+
+			.subscribe-panel__form-title {
+				margin-bottom: 30px;
+				font-size: 18px;
+				line-height: 1.4;
+				font-weight: 700;
+			}
+
+			.subscribe-panel__form-input input {
+				display: block;
+				width: 100%;
+				height: 35px;
+				padding: 5px 10px;
+				border: none;
+				border-bottom: 1px solid #d8d8d8;
+				border-radius: 0;
+				background-color: transparent;
+				color: #fff;
+				font-size: 16px !important;
+				font-weight: 400;
+				outline: none;
+			}
+
+			.subscribe-panel__form-input input::placeholder {
+				color: #aeb0b4;
+			}
+
+			.subscribe-panel__form-submit {
+				margin-top: 30px;
+			}
+
+			.subscribe-btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				height: 40px;
+				padding: 9px 19px;
+				border: 1px solid #fff;
+				border-radius: 4px;
+				background-color: #00081E;
+				color: #fff;
+				font-size: 16px;
+				font-weight: 700;
+				outline: none;
+				cursor: pointer;
+				transition: 0.3s;
+			}
+
+			.subscribe-btn:hover {
+				background-color: #fff;
+				color: #00081E;
+			}
+
+			.subscribe-btn--fill {
+				border-color: transparent;
+			}
+
+			.subscribe-btn--fill:hover {
+				border-color: #00081E;
+			}
+			
+			.subscribe-panel__form-close {
+				position: absolute;
+				right: 20px;
+				top: 30px;
+				width: 13px;
+				height: 13px;
+				padding: 0;
+				border: none;
+				cursor: pointer;
+				outline: none;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: contain;
+				background-color: transparent;
+				background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgZmlsbD0ibm9uZSI+PHBhdGggc3Ryb2tlPSIjQTNBM0EzIiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik0xMiAxIDEgMTJtMTEgMEwxIDEiLz48L3N2Zz4=);
+			}
+
+			.subscribe-panel__form-close:before {
+				content: "";
+				position: absolute;
+				left: -10px;
+				right: -10px;
+				top: -10px;
+				bottom: -10px;
+			}
+
+			.subscribe-panel.opened .subscribe-panel__toggle {
+				width: 0;
+				opacity: 0;
+				visibility: hidden;
+			}
+
+			.subscribe-panel.opened .subscribe-panel__form {
+				transform: translateY(-54%) translateX(0);
+			}
+
+			.subscribe-modal {
+				display: none;
+				width: 100%;
+				max-width: 345px;
+				padding: 60px 20px 30px;
+				border: 1px solid #858585;
+				text-align: center;
+			}
+
+			.subscribe-modal__title {
+				margin-bottom: 30px;
+				font-size: 16px;
+				font-weight: bold;
+				line-height: 1.4;
+				color: #313436;
+			}
+
+			.fb-subscribe-modal .fancybox-bg {
+				background: #000;
+			}
+
+			.fb-subscribe-modal.fancybox-is-open .fancybox-bg {
+				opacity: 0.5;
+			}
+
+			.fb-subscribe-modal .fancybox-close-small {
+				right: 10px;
+				top: 10px;
+			}
+
+			@media (max-width: 767px) {
+				.subscribe-panel__form {
+					padding: 30px 70px 30px 30px;
+					border-radius: 0;
+				}
+
+				.subscribe-panel__form-title {
+					font-size: 16px;
+				}
+				.subscribe-panel__toggle {
+					padding: 5px;
+					height: auto;
+					margin-top: 0;
+					font-size: 12px;
+					width: auto;
+				}
+			}
+		</style>
+
+				<!-- Subscribe Panel END -->	</div>
+</div>
+<!--div class="uk-section uk-section-secondary uk-preserve-color uk-section-xsmall  " style="padding-bottom: 23px; z-index: 2">
+	<div class="uk-position-relative">
+		<div class="uk-container">
+
+			<div class="uk-grid-small uk-flex-middle uk-flex-between tm-text-medium uk-grid" data-uk-grid>
+				<div class="uk-first-column">
+					<img src="/local/templates/pulkovo_main/images/icon-parking.svg" alt="Парковка в аэропорту" class="uk-margin-small-right uk-visible@s">
+					<a href="/transport/" class="uk-text-secondary">Парковка в аэропорту</a><br class="uk-hidden@s"> <span class="uk-color-white">Пулково от&nbsp;150&nbsp;₽</span>
+				</div>
+				<div>
+					<ul class="uk-text-muted uk-flex-middle uk-text-center uk-grid uk-small-padd@s" >
+						<li>
+							<span data-uk-icon="weather"></span>
+							<br class="uk-hidden@s">
+							<div class="gis_cont" style="display: none">
+								<link rel="stylesheet" href="https://ost1.gismeteo.ru/assets/flat-ui/legacy/css/informer.min.css">
+								<div id="gsInformerID-FaN077pme5W6iN" class="gsInformer" style="width:240px;height:62px">
+									<div class="gsIContent">
+										<div id="cityLink">
+											<a href="https://www.gismeteo.ru/weather-sankt-peterburg-pulkovo-12967/" target="_blank" title="Погода Санкт-Петербург (Пулково)">
+												<img src="https://ost1.gismeteo.ru/assets/flat-ui/img/gisloader.svg" style=" width: 24px; height: 24px" alt="Погода Санкт-Петербург (Пулково)">
+											</a>
+										</div>
+										<div class="gsLinks">
+											<table>
+												<tr>
+													<td>
+														<div class="leftCol">
+															<a href="https://www.gismeteo.ru/" target="_blank" title="Погода">
+																<img alt="Погода" src="https://ost1.gismeteo.ru/assets/flat-ui/img/logo-mini2.png" style="width: 11px; height:16px; vertical-align: middle; border: 0px" />
+																<img src="https://ost1.gismeteo.ru/assets/flat-ui/img/informer/gismeteo.svg" alt="Погода"  style="left: 5px; top:1px; vertical-align: middle; border: 0px">
+															</a>
+														</div>
+														<div class="rightCol">
+															<a href="https://www.gismeteo.ru/weather-sankt-peterburg-pulkovo-12967/2-weeks/" target="_blank"  title="Погода Санкт-Петербург (Пулково) на 2 недели">
+																<img src="https://ost1.gismeteo.ru/assets/flat-ui/img/informer/forecast-2weeks.ru.svg" style="top:auto; vertical-align: middle; border: 0px" alt="Погода Санкт-Петербург (Пулково) на 2 недели">
+															</a>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+															</div>
+							<span class="air_in_pulkovo"></span>
+						</li>
+						<li>
+							<span data-uk-icon="clock"></span>
+							<br class="uk-hidden@s">
+							<span class="uk-visible@s">4 октября </span>16:49<span class="uk-visible@s"> GMT+3</span>
+						</li>
+						<li class="last-strading">
+							<div class="search-fly-area">
+								<a href="http://www.artwell.ru/">
+									<img src="/local/templates/pulkovo_index/images/artwell_logo.png" width="71px" alt="">
+								</a>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</!--div-->
+
+<div class="favorite-star-container"></div>
+
+
+
+
+<style>
+.showed_after_10{
+	display: none !important;
+}
+</style>
+<style>
+	.cookies{
+		display: none;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		min-height: 76px;
+		background: rgba(255,255,255,0.85);
+		border-top: 1px solid rgba(0,0,0,0.15);
+		/* display: flex; */
+		align-items: center;
+		z-index: 2;
+	}
+	.cookies p{
+		flex: 1 1 auto;
+		text-align: center;
+		font-size: 14px;
+		margin: 0;
+		color: #757c80;
+		color: #363636;
+	}
+	.cookies p a{
+		text-decoration: underline;
+	}
+	.btn-suggest{
+		height: 76px;
+		line-height: 76px;
+		width: 200px;
+		border: none;
+		outline: none;
+		background: #00081E;
+		color: #fff;
+		font-size: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		min-width: 140px;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	.ck-ico{
+		display: inline-block;
+		height: 40px;
+		width: 42px;
+		background: url('/images/chk.png') no-repeat center 9px;
+	}
+	@media (min-width: 576px){
+		.cookies.show{
+			display: flex;
+
+		}
+	}
+
+	@media (max-width: 575px){
+		.cookies.show{
+			display: flex;
+			/* text-align: left; */
+            flex-direction: column;
+		}
+        .cookies.show>.uk-container{
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .btn-suggest{
+            width: 100%;
+            height: 50px;
+        }
+	}
+	@media (max-width: 1633px){
+		.btn-suggest{
+			position: relative;
+			right: auto;
+			top: auto;
+		}
+	}
+</style>
+<div class="cookies" id="cookie_notification">
+	<div class="uk-container">
+	<p class="ck-description">Мы используем cookies для того, чтобы сделать наш сайт максимально удобным и функциональным для пользователей. Продолжая пользоваться нашим веб-сайтом, вы даете <a target="_blank" href="/docs/files/pulkovo_data_agreement.pdf">согласие на обработку персональных данных</a>. Вы можете запретить сохранение cookie в настройках своего браузера</p>
+	</div>
+	<button class="btn-suggest">Согласен<span class="ck-ico"></span></span></button>
+</div>
+
+<script>if(!window.BX)window.BX={};if(!window.BX.message)window.BX.message=function(mess){if(typeof mess==='object'){for(let i in mess) {BX.message[i]=mess[i];} return true;}};</script>
+<script>(window.BX||top.BX).message({"pull_server_enabled":"N","pull_config_timestamp":1576523623,"shared_worker_allowed":"Y","pull_guest_mode":"N","pull_guest_user_id":0,"pull_worker_mtime":1758373118});(window.BX||top.BX).message({"PULL_OLD_REVISION":"Для продолжения корректной работы с сайтом необходимо перезагрузить страницу."});</script>
+<script>(window.BX||top.BX).message({"JS_CORE_LOADING":"Загрузка...","JS_CORE_NO_DATA":"- Нет данных -","JS_CORE_WINDOW_CLOSE":"Закрыть","JS_CORE_WINDOW_EXPAND":"Развернуть","JS_CORE_WINDOW_NARROW":"Свернуть в окно","JS_CORE_WINDOW_SAVE":"Сохранить","JS_CORE_WINDOW_CANCEL":"Отменить","JS_CORE_WINDOW_CONTINUE":"Продолжить","JS_CORE_H":"ч","JS_CORE_M":"м","JS_CORE_S":"с","JSADM_AI_HIDE_EXTRA":"Скрыть лишние","JSADM_AI_ALL_NOTIF":"Показать все","JSADM_AUTH_REQ":"Требуется авторизация!","JS_CORE_WINDOW_AUTH":"Войти","JS_CORE_IMAGE_FULL":"Полный размер"});</script><script src="/bitrix/js/main/core/core.min.js?1781602989245644"></script><script>BX.Runtime.registerExtension({"name":"main.core","namespace":"BX","loaded":true});</script>
+<script>BX.setJSList(["\/bitrix\/js\/main\/core\/core_ajax.js","\/bitrix\/js\/main\/core\/core_promise.js","\/bitrix\/js\/main\/polyfill\/promise\/js\/promise.js","\/bitrix\/js\/main\/loadext\/loadext.js","\/bitrix\/js\/main\/loadext\/extension.js","\/bitrix\/js\/main\/polyfill\/promise\/js\/promise.js","\/bitrix\/js\/main\/polyfill\/find\/js\/find.js","\/bitrix\/js\/main\/polyfill\/includes\/js\/includes.js","\/bitrix\/js\/main\/polyfill\/matches\/js\/matches.js","\/bitrix\/js\/ui\/polyfill\/closest\/js\/closest.js","\/bitrix\/js\/main\/polyfill\/fill\/main.polyfill.fill.js","\/bitrix\/js\/main\/polyfill\/find\/js\/find.js","\/bitrix\/js\/main\/polyfill\/matches\/js\/matches.js","\/bitrix\/js\/main\/polyfill\/core\/dist\/polyfill.bundle.js","\/bitrix\/js\/main\/core\/core.js","\/bitrix\/js\/main\/polyfill\/intersectionobserver\/js\/intersectionobserver.js","\/bitrix\/js\/main\/lazyload\/dist\/lazyload.bundle.js","\/bitrix\/js\/main\/polyfill\/core\/dist\/polyfill.bundle.js","\/bitrix\/js\/main\/parambag\/dist\/parambag.bundle.js"]);
+</script>
+<script>BX.Runtime.registerExtension({"name":"ui.design-tokens","namespace":"window","loaded":true});</script>
+<script>BX.Runtime.registerExtension({"name":"ui.fonts.opensans","namespace":"window","loaded":true});</script>
+<script>BX.Runtime.registerExtension({"name":"main.popup","namespace":"BX.Main","loaded":true});</script>
+<script>BX.Runtime.registerExtension({"name":"popup","namespace":"window","loaded":true});</script>
+<script>(window.BX||top.BX).message({"LANGUAGE_ID":"ru","FORMAT_DATE":"DD.MM.YYYY","FORMAT_DATETIME":"DD.MM.YYYY HH:MI:SS","COOKIE_PREFIX":"BITRIX_SM","SERVER_TZ_OFFSET":"10800","UTF_MODE":"Y","SITE_ID":"s1","SITE_DIR":"\/","USER_ID":"","SERVER_TIME":1791121793,"USER_TZ_OFFSET":0,"USER_TZ_AUTO":"Y","bitrix_sessid":"d26f474c462ddc01ed77264aa15ecc11"});</script><script src="/bitrix/js/pull/protobuf/protobuf.js?1758271506274055"></script>
+<script src="/bitrix/js/pull/protobuf/model.min.js?175827150614190"></script>
+<script src="/bitrix/js/main/core/core_promise.min.js?17816029782494"></script>
+<script src="/bitrix/js/rest/client/rest.client.min.js?17582715079240"></script>
+<script src="/bitrix/js/pull/client/pull.client.min.js?175837311849849"></script>
+<script src="/bitrix/js/main/popup/dist/main.popup.bundle.min.js?178160298967330"></script>
+<script>
+					if (Intl && Intl.DateTimeFormat)
+					{
+						const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+						document.cookie = "BITRIX_SM_TZ=" + timezone + "; path=/; expires=Fri, 01 Oct 2027 00:00:00 +0300";
+						
+					}
+				</script>
+
+
+
+<script src="/local/assets/main/js/jquery.min.js?175826854895957"></script>
+<script src="/local/assets/main/js/app.js?1779179516886689"></script>
+<script src="/local/assets/main/js/script.js?178706395267164"></script>
+<script src="/include/js/modernizr-2.7.2.js?175826846151324"></script>
+<script src="/local/assets/main/js/custom.js?17582685484248"></script>
+<script src="/include/js/chosen.jquery.min.js?175826846161558"></script>
+<script src="/include/js/jquery.inputmask.bundle.min.js?1758268461118144"></script>
+<script src="/include/js/slick.min.js?175826846142862"></script>
+<script src="/include/js/jquery.fancybox.min.js?175826846168253"></script>
+
+
+
+<script>
+	var timezall="2026-10-04 19:49:53";
+	</script>
+<script type="text/javascript" data-skip-movie="true">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(79391614, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true,
+        ecommerce:"dataLayer"
+   });
+</script>
+<script>
+                    $(document).on("click", ".overhelp", function (e) {
+                        $(this).prev().toggle('active');
+                        e.preventDefault()
+                    });
+                </script>
+<script>
+function _processform_8BACKi(){
+	if (BX('bxajaxid_b215c743a54a05690c7878f7f002c6fb_8BACKi'))
+	{
+		var obForm = BX('bxajaxid_b215c743a54a05690c7878f7f002c6fb_8BACKi').form;
+		BX.bind(obForm, 'submit', function() {BX.ajax.submitComponentForm(this, 'comp_b215c743a54a05690c7878f7f002c6fb', true)});
+	}
+	BX.removeCustomEvent('onAjaxSuccess', _processform_8BACKi);
+}
+if (BX('bxajaxid_b215c743a54a05690c7878f7f002c6fb_8BACKi'))
+	_processform_8BACKi();
+else
+	BX.addCustomEvent('onAjaxSuccess', _processform_8BACKi);
+</script><script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+			$(function() {
+				// open subscribe panel
+				$(document).on('click', '.subscribe-panel__toggle', function() {
+					const $this = $(this);
+					$this.closest('.subscribe-panel').toggleClass('opened');
+				});
+
+				// close subscribe panel on click outside
+				$(document).on('click', function(e) {
+					if (!$(e.target).closest('.subscribe-panel').length) {
+						$('.subscribe-panel').removeClass('opened');
+					}
+				});
+				
+				// close subscribe panel on click close button
+				$(document).on('click', '.subscribe-panel__form-close', function() {
+					const $this = $(this);
+					$this.closest('.subscribe-panel').removeClass('opened');
+				});
+
+				// close & clear subscribe form
+				function submitSubscribeForm(email) {
+					$('.subscribe-panel').removeClass('opened');
+					$('#subscribe-form').trigger('reset');
+
+					// Редирект через 2 секунды
+					setTimeout(function() {
+						const backUrl = encodeURIComponent(window.location.href);
+						window.location.href = `/mailing-setup/index.php?email=${encodeURIComponent(email)}&back=${backUrl}`;
+					}, 100);
+				}
+
+				// unisender ajax subscribe
+				$(document).on('submit', '#subscribe-form', function(e) {
+					e.preventDefault();
+					let email = $('.subscribe-panel__form-input input').val();
+					let apiKey = '6ec18pqyr4usr4zk46akd1ey6da1stz8cd13njbo';
+					let listId = '8';
+
+					$.ajax({
+						url: 'https://api.unisender.com/ru/api/subscribe',
+						method: 'POST',
+						data: {
+							api_key: apiKey,
+							list_ids: listId,
+							fields: {
+								email: email
+							},
+							double_optin: 3,
+							overwrite: 2
+						},
+						dataType: 'json',
+						success: function(response) {
+							submitSubscribeForm(email);
+						},
+						error: function() {
+							submitSubscribeForm(email);
+						}
+					});
+				});
+
+				
+			});
+		</script>
+<script async src="https://www.gismeteo.ru/api/informer/getinformer/?hash=FaN077pme5W6iN"></script>
+
+<script >
+	function load_air(){
+		var tmp_data=$('.gis_cont').contents().find('.gsTemp').text();
+		if(tmp_data!='undefined'){
+			$('.air_in_pulkovo').text(tmp_data);
+			$('.gis_cont').remove();
+		}
+	}
+
+	$( document ).ready(function() {
+		setTimeout(function() {
+			load_air();
+		}, 1500);
+	});
+	redraw_favorites();
+</script>
+<script src="/local/templates/pulkovo_main/js/js.cookie.min.js?"></script>
+<script src="/local/templates/pulkovo_main/js/google-translate.js?"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=TranslateInit"></script>
+
+
+
+<script>
+	$(function(){
+		$("a[href^='#']").click(function(){
+			var _href = $(this).attr("href");
+			$("html, body").animate({scrollTop: $(_href).offset().top+"px"});
+			return false;
+		});
+	});
+
+	$(document).ready(function() {
+			document.querySelectorAll('.uk-transport[style*="display: none"]').forEach(span => {
+			span.style.display = 'inline';
+		});
+
+		document.querySelectorAll('.tm-navbar-nav span.uk-transport').forEach(span => {
+			span.style.display = 'inline';
+		});
+
+		$(".my_select_box").chosen({
+			max_selected_options: 1,
+			no_results_text: "Ничего не найдено!"
+		});
+
+		function locationChecker() {
+			var location = window.location.href;
+			var hrefArr = location.split('/')
+
+			if (hrefArr[3] === '' || undefined) {
+
+			} else {
+
+				// addIconInPage();
+				starSwitcher();
+				if ($('.last-strading .my-fly-area').is(':hidden')){
+					$('.favorite-star-container .custom-container').hide(300).removeClass('show');
+				// console.log('hidden');
+			} else{
+				// console.log('visible');
+				$('.favorite-star-container .custom-container').show(300).addClass('show');
+			}
+
+			removeIcon();
+			$(window).scroll(function() {
+				removeIcon();
+			});
+			$(".tm-navbar-container")
+			.addClass('after-class');
+		}
+	}
+	locationChecker();
+	// function favoriteFlightChecker() {
+
+	// 	$('.ico-start').on('click', function(e){
+	// 		console.log('clck');
+	// 		if ($('.last-strading .my-fly-area').is(':hidden')){
+	// 			console.log('hidden');
+	// 		} else{
+	// 			console.log('visible');
+	// 		}
+	// 	});
+
+	// 	if ($('.last-strading .my-fly-area').is(':hidden')){
+	// 		console.log('hidden');
+	// 	} else{
+	// 		console.log('visible');
+	// 	}
+	// }
+	function removeIcon() {
+		var scrollTop = $(window).scrollTop();
+		var heightWindow = ($(window).height() - 200);
+		var footerOffset = $('.uk-section.uk-section-small.uk-light.tm-footer').offset().top;
+
+		if ((scrollTop + heightWindow) > footerOffset) {
+			$('.my-fly-area').append($('.favorite-star-container .link-reset-all'));
+			$('.favorite-star-container .custom-container').hide(300);
+			setTimeout(function(){
+				return $('.footer-custom-container').append($('.uk-dropdown.keep-open-on-click.uk-dropdown-long.uk-dropdown-top-right'))
+			}, 50);
+
+			if ($('.last-strading .my-fly-area').is(':visible') && $('.last-strading .my-fly-area .uk-dropdown.keep-open-on-click.uk-dropdown-long.uk-dropdown-top-right').is(':visible')) {
+				$('.my-fly-area .footer-custom-container .uk-link-reset.uk-link-dropdown').addClass('uk-open');
+			}
+		}
+
+		if($('.tm-custom').find('span').attr('data-uk-icon') === 'star-active' && (scrollTop + heightWindow) < footerOffset && $('.last-strading .my-fly-area').is(':visible')) {
+			$('.favorite-star-container .custom-container').append($('.footer-custom-container .uk-dropdown.keep-open-on-click.uk-dropdown-long.uk-dropdown-top-right'));
+			$('.favorite-star-container .custom-container').show(300);
+			$('.my-fly-area .footer-custom-container .uk-link-reset.uk-link-dropdown').removeClass('uk-open');
+			$('.favorite-star-container').append($('.my-fly-area .link-reset-all'));
+		}
+
+	}
+
+	function addIconInPage() {
+		var element = '<div class="custom-container" style="display: none;"><a class="uk-button uk-visible@s uk-button-default tm-button-totop tm-custom" href="#" aria-expanded="false"><span data-uk-icon="star-active" class="uk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" data-svg="star-active"><path class="cls-active" d="M461.375,1253.52a1.893,1.893,0,0,1-1.1-.41l-4.584-3.23a1.841,1.841,0,0,0-1.818,0l-4.589,3.23a1.365,1.365,0,0,1-1.989-.03,1.622,1.622,0,0,1-.112-1.5l1.655-5.36a1.776,1.776,0,0,0-.564-1.73l-4.49-3.36a1.3,1.3,0,0,1,.8-2.47l5.611-.08a1.785,1.785,0,0,0,1.476-1.07l1.808-5.31a1.3,1.3,0,0,1,2.595,0l1.814,5.31a1.775,1.775,0,0,0,1.472,1.07l5.608,0.08a1.3,1.3,0,0,1,.81,2.47l-4.5,3.36a1.776,1.776,0,0,0-.56,1.73l1.654,5.36a1.627,1.627,0,0,1-.115,1.5A1.1,1.1,0,0,1,461.375,1253.52Z" transform="translate(-442.5 -1230.5)"></path></svg></span></a></div>';
+		$('.favorite-star-container').prepend($(element));
+	}
+
+	function starSwitcher() {
+		var footerIcon = $('.search-fly-area .uk-link-reset.uk-link-dropdown');
+
+		$('.tm-custom').on('click', function(e) {
+			e.preventDefault();
+
+			if ($('.last-strading .my-fly-area').is(':hidden')) {
+
+				$(this).parent().append($('.uk-dropdown.keep-open-on-click.uk-dropdown-short.uk-dropdown-top'));
+				$(this).parent().toggleClass('show');
+
+				if ($('.custom-container').hasClass('show')) {
+					$(this).siblings().show(300);
+				} else {
+					$(this).siblings().hide(300)
+					setTimeout(function(){
+						return $('.search-fly-area').append($('.uk-dropdown.keep-open-on-click.uk-dropdown-short.uk-dropdown-top'));
+					}, 400);
+				}
+
+			} else {
+
+				$(this).parent().append($('.footer-custom-container .uk-dropdown.keep-open-on-click.uk-dropdown-long.uk-dropdown-top-right'));
+				$(this).parent().toggleClass('show');
+				if ($('.custom-container').hasClass('show')) {
+					$(this).siblings().show(300);
+				} else {
+					$(this).siblings().hide(300)
+					setTimeout(function(){
+						return $('.footer-custom-container').append($('.uk-dropdown.keep-open-on-click.uk-dropdown-long.uk-dropdown-top-right'))
+					}, 400);
+				}
+
+			}
+
+		});
+
+		// $('.last-strading .my-fly-area').on('click', function(e){
+		// 	$('.last-strading .my-fly-area')
+		// 	if ($('.last-strading .my-fly-area:hidden')) {
+		// 		console.log('true');
+		// 	} else {
+		// 		console.log('false');
+		// 	}
+		// });
+		// footerIcon.on('click', function(e){
+		// 	if (footerIcon.siblings().length) {
+		// 		$(this).parent().append($($('.custom-container .favorite-popup')));
+		// 	}
+		// });
+	}
+
+
+});
+</script>
+<script>
+	function checkCookies(){
+		let cookieDate = localStorage.getItem('cookieDate');
+		console.log(cookieDate);
+		let cookieNotification = document.getElementById('cookie_notification');
+		let cookieBtn = cookieNotification.querySelector('.btn-suggest');
+
+		// Если записи про кукисы нет или она просрочена на 1 год, то показываем информацию про кукисы
+		if( !cookieDate || (+cookieDate + 31536000000) < Date.now() ){
+			cookieNotification.classList.add('show');
+		}
+
+		// При клике на кнопку, в локальное хранилище записывается текущая дата в системе UNIX
+		cookieBtn.addEventListener('click', function(){
+			localStorage.setItem( 'cookieDate', Date.now() );
+			cookieNotification.classList.remove('show');
+		})
+	}
+	checkCookies();
+</script>
+</body>
+</html>
