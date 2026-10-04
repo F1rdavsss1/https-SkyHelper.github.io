@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AeroDesk / SkyHelper — «Авиа-помощник»
 
 Премиальное мобильное приложение для бортпроводников, агентов регистрации и сотрудников авиакомпаний.
@@ -91,3 +92,6 @@ Safe Area / Dynamic Island / Home Indicator учтены в layout.
 ## Безопасность (план production)
 
 JWT + refresh rotation · Keychain/Keystore · RBAC · audit_log · rate limit · 152-ФЗ разделение PII.
+=======
+# https-SkyHelper.github.io
+>>>>>>> 52d48442426abe8d8817b704f819ae30404c4f74
