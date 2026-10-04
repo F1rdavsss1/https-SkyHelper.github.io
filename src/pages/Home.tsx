@@ -3,10 +3,35 @@ import { useNavigate } from 'react-router-dom'
 import { FlightCard } from '../components/FlightCard'
 import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
-import { useFlights } from '../context/FlightsContext'
+import { isActiveFlight, isDepartedFlight, useFlights } from '../context/FlightsContext'
 import { useNotifications } from '../context/NotificationsContext'
-import { Search, Bell, RefreshCw } from 'lucide-react'
+import { Search, Bell, RefreshCw, BookOpen } from 'lucide-react'
 import { formatTime } from '../lib/utils'
+import type { Flight } from '../types'
+
+function FlightGrid({
+  flights,
+  exactId,
+  onOpen,
+}: {
+  flights: Flight[]
+  exactId?: string
+  onOpen: (f: Flight) => void
+}) {
+  if (!flights.length) return null
+  return (
+    <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+      {flights.map((flight) => (
+        <FlightCard
+          key={flight.id}
+          flight={flight}
+          highlight={exactId === flight.id}
+          onClick={() => onOpen(flight)}
+        />
+      ))}
+    </div>
+  )
+}
 
 export function Home() {
   const navigate = useNavigate()
@@ -16,10 +41,7 @@ export function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const [airline, setAirline] = useState<string | null>(null)
 
-  const results = useMemo(
-    () => search(searchQuery, airline),
-    [search, searchQuery, airline]
-  )
+  const results = useMemo(() => search(searchQuery, airline), [search, searchQuery, airline])
 
   const exact = useMemo(() => {
     const q = searchQuery.trim().toUpperCase().replace(/\s+/g, '')
@@ -27,8 +49,9 @@ export function Home() {
     return results.find((f) => f.flightNumber.replace(/\s+/g, '') === q) ?? null
   }, [searchQuery, results])
 
-  // highlight exact match card when full flight number typed
   const board = searchQuery.trim() ? results : byAirline(airline)
+  const active = useMemo(() => board.filter(isActiveFlight), [board])
+  const departed = useMemo(() => board.filter(isDepartedFlight), [board])
 
   const pushHistory = (q: string) => {
     try {
@@ -43,10 +66,17 @@ export function Home() {
   }
 
   const quick = useMemo(() => {
-    const openish = flights.filter((f) => f.status === 'on_time' || f.status === 'boarding' || f.status === 'delayed')
-    const pool = openish.length ? openish : flights
+    const openish = active.filter(
+      (f) => f.status === 'on_time' || f.status === 'boarding' || f.status === 'delayed'
+    )
+    const pool = openish.length ? openish : active
     return pool.slice(0, 4).map((f) => f.flightNumber)
-  }, [flights])
+  }, [active])
+
+  const openFlight = (flight: Flight) => {
+    pushHistory(flight.flightNumber)
+    navigate(`/flights/${flight.id}`)
+  }
 
   return (
     <div className="min-h-dvh page-pad app-bg">
@@ -54,15 +84,25 @@ export function Home() {
         <div className="page-wrap py-3 sm:py-4 flex items-center justify-between gap-3">
           <div className="min-w-0">
             <h1 className="text-h1 text-lavender-200 md:hidden">AeroDesk</h1>
-            <h1 className="text-h1 text-lavender-200 hidden md:block">Табло регистрации</h1>
+            <h1 className="text-h1 text-lavender-200 hidden md:block">Табло Пулково</h1>
             <p className="text-[12px] sm:text-caption text-navy-300 mt-0.5 truncate">
               {sourceLabel}
               {isLive ? ' · live' : ''}
               {' · '}
               {lastUpdated.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
+              {' · '}
+              {flights.length} рейсов
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => navigate('/knowledge')}
+              className="touch-target flex items-center justify-center rounded-xl bg-lavender-600/20 border border-lavender-500/40"
+              aria-label="Справочник"
+            >
+              <BookOpen className="w-5 h-5 text-lavender-300" />
+            </button>
             <button
               type="button"
               onClick={refresh}
@@ -89,7 +129,6 @@ export function Home() {
       </header>
 
       <main className="page-wrap py-4 sm:py-5 space-y-4 sm:space-y-5">
-        {/* Search */}
         <section className="rounded-2xl bg-[#2a2a32] border border-lavender-500/30 p-3 sm:p-4">
           <p className="text-[12px] sm:text-[13px] text-lavender-300 mb-2 font-medium">
             Введите рейс — стойки, выход и вылет
@@ -136,7 +175,6 @@ export function Home() {
           </div>
         )}
 
-        {/* Airline filter */}
         <section>
           <h2 className="text-[13px] sm:text-[14px] font-semibold text-lavender-300 mb-2">Авиакомпания</h2>
           <div className="chip-row">
@@ -169,14 +207,8 @@ export function Home() {
               </button>
             ))}
           </div>
-          {airline === 'SU' && (
-            <p className="text-[12px] text-navy-400 mt-2">
-              SU — Аэрофлот / Россия (включая codeshare FV)
-            </p>
-          )}
         </section>
 
-        {/* Exact hit banner */}
         {exact && (
           <div className="rounded-2xl border border-lavender-400 bg-lavender-600/20 p-3.5 sm:p-4 animate-in">
             <div className="text-[12px] sm:text-[13px] font-semibold text-lavender-300 mb-1">Найден рейс</div>
@@ -191,67 +223,57 @@ export function Home() {
                     )
                   : formatTime(exact.scheduledDeparture)}
               </b>
-              {exact.boardingStart ? (
-                <>
-                  {' '}
-                  · посадка <b>{formatTime(exact.boardingStart)}</b>
-                </>
-              ) : null}
             </div>
-            <Button
-              className="mt-3 w-full sm:w-auto"
-              onClick={() => {
-                pushHistory(exact.flightNumber)
-                navigate(`/flights/${exact.id}`)
-              }}
-            >
+            <Button className="mt-3 w-full sm:w-auto" onClick={() => openFlight(exact)}>
               Открыть карточку
             </Button>
           </div>
         )}
 
-        <section>
-          <div className="flex items-center justify-between mb-3 gap-2">
-            <h2 className="text-h2 text-lavender-200 min-w-0">
-              {searchQuery.trim() ? 'Результаты' : 'Открыта регистрация'}
-              <span className="text-caption font-normal text-navy-400 ml-2">({board.length})</span>
-            </h2>
+        {board.length === 0 && !loading ? (
+          <div className="text-center py-12 sm:py-14 rounded-2xl bg-[#2a2a32] border border-lavender-500/20">
+            <Search className="w-8 h-8 mx-auto text-lavender-400 mb-3" />
+            <h3 className="text-[16px] font-semibold text-lavender-100 mb-1">Рейс не найден</h3>
+            <Button
+              variant="secondary"
+              className="mt-4"
+              onClick={() => {
+                setSearchQuery('')
+                setAirline(null)
+              }}
+            >
+              Сбросить
+            </Button>
           </div>
+        ) : (
+          <>
+            <section>
+              <h2 className="text-h2 text-lavender-200 mb-3">
+                Ещё не вылетели
+                <span className="text-caption font-normal text-navy-400 ml-2">({active.length})</span>
+              </h2>
+              <FlightGrid flights={active} exactId={exact?.id} onOpen={openFlight} />
+              {active.length === 0 && (
+                <p className="text-[13px] text-navy-400 rounded-xl border border-lavender-500/20 bg-[#2a2a32] p-4">
+                  Нет активных рейсов по фильтру
+                </p>
+              )}
+            </section>
 
-          {board.length > 0 ? (
-            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-              {board.map((flight) => (
-                <FlightCard
-                  key={flight.id}
-                  flight={flight}
-                  highlight={exact?.id === flight.id}
-                  onClick={() => {
-                    pushHistory(flight.flightNumber)
-                    navigate(`/flights/${flight.id}`)
-                  }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 sm:py-14 rounded-2xl bg-[#2a2a32] border border-lavender-500/20">
-              <Search className="w-8 h-8 mx-auto text-lavender-400 mb-3" />
-              <h3 className="text-[16px] font-semibold text-lavender-100 mb-1">Рейс не найден</h3>
-              <p className="text-[14px] text-navy-400 px-4 sm:px-6">
-                Нет рейсов с открытой регистрацией по этому запросу
-              </p>
-              <Button
-                variant="secondary"
-                className="mt-4"
-                onClick={() => {
-                  setSearchQuery('')
-                  setAirline(null)
-                }}
-              >
-                Сбросить
-              </Button>
-            </div>
-          )}
-        </section>
+            <section>
+              <h2 className="text-h2 text-lavender-200 mb-3">
+                Уже вылетели
+                <span className="text-caption font-normal text-navy-400 ml-2">({departed.length})</span>
+              </h2>
+              <FlightGrid flights={departed} exactId={exact?.id} onOpen={openFlight} />
+              {departed.length === 0 && (
+                <p className="text-[13px] text-navy-400 rounded-xl border border-lavender-500/20 bg-[#2a2a32] p-4">
+                  Пока нет вылетевших в выборке
+                </p>
+              )}
+            </section>
+          </>
+        )}
       </main>
     </div>
   )

@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { Search, Plane, FileText, Users, MoreHorizontal } from 'lucide-react'
+import { Search, Plane, BookOpen, Users, MoreHorizontal } from 'lucide-react'
 import { cn } from '../lib/utils'
 
 const tabs = [
   { to: '/', label: 'Главная', short: 'Поиск', icon: Search, end: true },
   { to: '/flights', label: 'Рейсы', short: 'Рейсы', icon: Plane },
-  { to: '/documents', label: 'Документы', short: 'Доки', icon: FileText },
+  { to: '/knowledge', label: 'Справочник', short: 'Справ.', icon: BookOpen },
   { to: '/contacts', label: 'Контакты', short: 'Связь', icon: Users },
   { to: '/more', label: 'Ещё', short: 'Ещё', icon: MoreHorizontal },
 ]

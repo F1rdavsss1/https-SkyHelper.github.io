@@ -108,7 +108,7 @@ export function FlightCard({ flight, onClick, highlight }: FlightCardProps) {
         </div>
       </div>
 
-      {flight.specialPassengers.length > 0 && (
+      {flight.specialPassengers.length > 0 ? (
         <div className="flex flex-wrap gap-1.5 mt-2">
           {flight.specialPassengers.map((sp, idx) => (
             <span
@@ -125,6 +125,10 @@ export function FlightCard({ flight, onClick, highlight }: FlightCardProps) {
               ×{sp.count}
             </span>
           ))}
+        </div>
+      ) : (
+        <div className="mt-2 text-[11px] text-lavender-400/90">
+          Особые: УМКА / PRM / PETC / WEAP — в карточке рейса и справочнике
         </div>
       )}
     </button>

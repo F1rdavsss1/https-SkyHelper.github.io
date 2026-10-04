@@ -154,7 +154,7 @@ function mapFlight(raw) {
       to: destinationAirport(raw),
     },
     scheduledDeparture: std.toISOString(),
-    actualDeparture: atd ? atd.toISOString() : etd && delayMinutes ? etd.toISOString() : undefined,
+    actualDeparture: atd ? atd.toISOString() : undefined,
     scheduledArrival: arrSked.toISOString(),
     status,
     gate,
@@ -202,29 +202,33 @@ export async function fetchLedBoard({ when = '0' } = {}) {
 
   const flights = data.map(mapFlight).filter((f) => f.flightNumber && f.route.to.code !== '???')
 
-  // Only flights where check-in is still relevant (not closed yet)
-  const now = Date.now()
-  const windowed = flights.filter((f) => {
-    if (f.status === 'departed' || f.status === 'arrived' || f.status === 'cancelled') return false
-    const checkInEnd = new Date(f.checkInEnd).getTime()
-    if (Number.isFinite(checkInEnd) && checkInEnd < now) return false
-    const dep = new Date(f.scheduledDeparture).getTime()
-    return dep <= now + 18 * 3600_000
+  // Full LED day board: keep all statuses (active + departed + cancelled)
+  const rank = (f) => {
+    if (f.status === 'boarding') return 0
+    if (f.status === 'delayed') return 1
+    if (f.status === 'on_time' || f.status === 'scheduled') return 2
+    if (f.status === 'cancelled') return 3
+    return 4 // departed / arrived
+  }
+
+  flights.sort((a, b) => {
+    const ra = rank(a)
+    const rb = rank(b)
+    if (ra !== rb) return ra - rb
+    return new Date(a.scheduledDeparture) - new Date(b.scheduledDeparture)
   })
 
-  windowed.sort((a, b) => new Date(a.scheduledDeparture) - new Date(b.scheduledDeparture))
-
   const airlinesMap = new Map()
-  for (const f of windowed) {
+  for (const f of flights) {
     if (!airlinesMap.has(f.airline.code)) airlinesMap.set(f.airline.code, f.airline)
   }
 
   return {
-    flights: windowed,
+    flights,
     airlines: [...airlinesMap.values()].sort((a, b) => a.code.localeCompare(b.code)),
     source: 'pulkovo',
     airport: 'LED',
     updatedAt: new Date().toISOString(),
-    count: windowed.length,
+    count: flights.length,
   }
 }

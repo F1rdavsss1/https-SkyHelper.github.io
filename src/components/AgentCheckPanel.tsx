@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Check, ChevronDown, ClipboardList } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Check, ChevronDown, ClipboardList, BookOpen } from 'lucide-react'
 import { phaseLabelRu, specialPassengerGuides } from '../data/specialGuides'
 import type { ChecklistItem, SpecialPassengerCategory, SpecialPassengerCount } from '../types'
 
@@ -27,6 +28,7 @@ function groupByPhase(items: ChecklistItem[]) {
 }
 
 export function AgentCheckPanel({ onFlight }: AgentCheckPanelProps) {
+  const navigate = useNavigate()
   const [openId, setOpenId] = useState<string | null>(() => {
     const first = onFlight[0]
     if (!first) return '1'
@@ -55,8 +57,32 @@ export function AgentCheckPanel({ onFlight }: AgentCheckPanelProps) {
           Как зарегистрировать на стойке
         </h3>
         <p className="text-[13px] text-navy-400 mt-1">
-          Подробные действия по этапам: до стойки → регистрация → гейт
+          Чеклисты УМКА, PRM, PETC, VIP… Табло аэропорта не отдаёт SSR-счётчики — смотрите памятки здесь.
         </p>
+        <div className="flex flex-wrap gap-2 mt-2">
+          <button
+            type="button"
+            onClick={() => navigate('/knowledge')}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-lavender-600/25 border border-lavender-500/40 text-lavender-200"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            Справочник мест / ремарок
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/knowledge/weap')}
+            className="px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#1e1e24] border border-lavender-500/30 text-lavender-200"
+          >
+            WEAP
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/knowledge/petc')}
+            className="px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#1e1e24] border border-lavender-500/30 text-lavender-200"
+          >
+            PETC
+          </button>
+        </div>
       </div>
 
       {onFlight.length > 0 && (

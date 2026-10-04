@@ -1,19 +1,21 @@
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FlightCard } from '../components/FlightCard'
-import { useFlights } from '../context/FlightsContext'
-import { useState } from 'react'
+import { isActiveFlight, isDepartedFlight, useFlights } from '../context/FlightsContext'
 
 export function Flights() {
   const navigate = useNavigate()
   const { airlines, byAirline, lastUpdated, isLive, sourceLabel, loading, error } = useFlights()
   const [airline, setAirline] = useState<string | null>(null)
   const list = byAirline(airline)
+  const active = useMemo(() => list.filter(isActiveFlight), [list])
+  const departed = useMemo(() => list.filter(isDepartedFlight), [list])
 
   return (
     <div className="min-h-dvh page-pad app-bg">
       <header className="sticky top-0 z-40 glass border-b border-lavender-500/25 safe-top">
         <div className="page-wrap py-3 sm:py-4">
-          <h1 className="text-h1 text-lavender-200">Рейсы</h1>
+          <h1 className="text-h1 text-lavender-200">Рейсы Пулково</h1>
           <p className="text-[12px] sm:text-caption text-navy-400 mt-0.5 truncate">
             {sourceLabel}
             {isLive ? ' · live' : ''} · {list.length} ·{' '}
@@ -50,19 +52,42 @@ export function Flights() {
           </div>
         </div>
       </header>
-      <main className="page-wrap py-4 sm:py-5">
-        <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-          {list.map((flight) => (
-            <FlightCard
-              key={flight.id}
-              flight={flight}
-              onClick={() => navigate(`/flights/${flight.id}`)}
-            />
-          ))}
-        </div>
+      <main className="page-wrap py-4 sm:py-5 space-y-6">
+        <section>
+          <h2 className="text-h2 text-lavender-200 mb-3">
+            Ещё не вылетели
+            <span className="text-caption font-normal text-navy-400 ml-2">({active.length})</span>
+          </h2>
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+            {active.map((flight) => (
+              <FlightCard
+                key={flight.id}
+                flight={flight}
+                onClick={() => navigate(`/flights/${flight.id}`)}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-h2 text-lavender-200 mb-3">
+            Уже вылетели
+            <span className="text-caption font-normal text-navy-400 ml-2">({departed.length})</span>
+          </h2>
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+            {departed.map((flight) => (
+              <FlightCard
+                key={flight.id}
+                flight={flight}
+                onClick={() => navigate(`/flights/${flight.id}`)}
+              />
+            ))}
+          </div>
+        </section>
+
         {list.length === 0 && (
           <div className="text-center py-14 rounded-2xl bg-[#2a2a32] border border-lavender-500/20 text-navy-400 text-[14px]">
-            Нет рейсов с открытой регистрацией
+            Нет рейсов
           </div>
         )}
       </main>

@@ -59,12 +59,16 @@ function hydrate(f: ApiFlight): Flight {
   }
 }
 
-/** Board for check-in agents: hide flights whose registration already closed */
-function isCheckInRelevant(flight: Flight, now = new Date()): boolean {
-  if (flight.status === 'departed' || flight.status === 'arrived' || flight.status === 'cancelled') {
-    return false
-  }
-  return getCheckInPhase(flight, now) !== 'closed'
+/** Split board: still at airport vs already departed */
+export function isDepartedFlight(flight: Flight): boolean {
+  if (flight.status === 'departed' || flight.status === 'arrived') return true
+  // ATD set but status lag — treat as departed (except cancelled)
+  if (flight.actualDeparture && flight.status !== 'cancelled') return true
+  return false
+}
+
+export function isActiveFlight(flight: Flight): boolean {
+  return !isDepartedFlight(flight)
 }
 
 export type CheckInPhase = 'not_started' | 'open' | 'closing_soon' | 'closed'
@@ -125,15 +129,13 @@ export function FlightsProvider({ children }: { children: ReactNode }) {
         throw new Error(body.detail || body.error || `HTTP ${res.status}`)
       }
       const data = (await res.json()) as BoardResponse
-      const live = (data.flights ?? []).map(hydrate).filter((f) => isCheckInRelevant(f))
+      const live = (data.flights ?? []).map(hydrate)
       setFlights(live)
       setAirlines(data.airlines ?? [])
       setLastUpdated(data.updatedAt ? new Date(data.updatedAt) : new Date())
       setIsLive(Boolean(data.live))
       setSourceLabel(
-        data.airport === 'LED'
-          ? 'LED · Пулково · регистрация'
-          : data.airport || data.source || 'LED · Пулково'
+        data.airport === 'LED' ? 'LED · Пулково · live' : data.airport || data.source || 'LED · Пулково'
       )
     } catch (e) {
       setIsLive(false)
@@ -146,7 +148,7 @@ export function FlightsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     void load()
-    const id = window.setInterval(() => void load(), 60_000)
+    const id = window.setInterval(() => void load(), 30_000)
     return () => window.clearInterval(id)
   }, [load])
 
