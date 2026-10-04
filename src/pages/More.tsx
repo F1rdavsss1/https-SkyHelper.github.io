@@ -8,17 +8,19 @@ import {
   ChevronRight,
   Moon,
   Plane,
+  BookOpen,
 } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 
 const links = [
+  { to: '/knowledge', label: 'Справочник агента', icon: BookOpen, desc: 'Места, ремарки, WEAP, PETC, памятки АК' },
   { to: '/special-passengers', label: 'Особые пассажиры', icon: Accessibility, desc: 'Памятки и чеклисты' },
+  { to: '/documents', label: 'Документы', icon: FileStack, desc: 'Открываются в приложении' },
   { to: '/tabs', label: 'Мои вкладки', icon: LayoutGrid, desc: 'Чеклисты и заметки' },
   { to: '/notifications', label: 'Уведомления', icon: Bell, desc: 'Гейты, задержки, посадка' },
   { to: '/settings', label: 'Настройки', icon: Settings, desc: 'Тема и язык' },
-  { to: '/documents', label: 'Документы', icon: FileStack, desc: 'Правила АК и ФАП' },
 ]
 
 export function More() {

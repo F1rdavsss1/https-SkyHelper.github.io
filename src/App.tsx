@@ -15,6 +15,7 @@ import { Settings } from './pages/Settings'
 import { More } from './pages/More'
 import { Notifications } from './pages/Notifications'
 import { MyTabs } from './pages/MyTabs'
+import { KnowledgeHub, KnowledgeSection } from './pages/Knowledge'
 import { cn } from './lib/utils'
 
 function Shell() {
@@ -22,6 +23,7 @@ function Shell() {
   const hideNav =
     location.pathname.startsWith('/flights/') ||
     location.pathname.startsWith('/special-passengers/') ||
+    location.pathname.startsWith('/knowledge/') ||
     location.pathname === '/notifications'
 
   return (
@@ -51,6 +53,9 @@ function App() {
                 <Route path="/tabs" element={<MyTabs />} />
                 <Route path="/special-passengers" element={<SpecialPassengers />} />
                 <Route path="/special-passengers/:id" element={<PassengerGuide />} />
+                <Route path="/knowledge" element={<KnowledgeHub />} />
+                <Route path="/knowledge/:sectionId/:guideId" element={<KnowledgeSection />} />
+                <Route path="/knowledge/:sectionId" element={<KnowledgeSection />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

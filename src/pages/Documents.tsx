@@ -1,31 +1,103 @@
 import { useState } from 'react'
-import { documents } from '../data/mockData'
+import { useNavigate } from 'react-router-dom'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
-import { FileText, Search, Folder, Download, Eye } from 'lucide-react'
+import { FileText, Search, Folder, BookOpen } from 'lucide-react'
+import { knowledgeSections } from '../data/opsKnowledge'
+import {
+  petcSteps,
+  remarks,
+  seatLegend,
+  weapSteps,
+  wheelchairCodes,
+} from '../data/opsKnowledge'
+
+type DocArticle = {
+  id: string
+  folder: string
+  nameRu: string
+  name: string
+  bodyRu: string
+}
+
+function buildArticles(): DocArticle[] {
+  const seatsBody = seatLegend
+    .map((s) => `• ${s.titleRu}\n  ${s.descriptionRu}`)
+    .join('\n\n')
+
+  const remarksBody = remarks.map((r) => `${r.code} — ${r.titleRu}\n${r.descriptionRu}`).join('\n\n')
+
+  const wchBody = wheelchairCodes
+    .map((w) => `${w.code}${w.phoneticRu ? ` (${w.phoneticRu})` : ''}\n${w.descriptionRu}`)
+    .join('\n\n')
+
+  const weapBody = weapSteps
+    .map((s, i) => `${i + 1}. ${s.textRu}${s.detailRu ? `\n   ${s.detailRu}` : ''}`)
+    .join('\n\n')
+
+  const petcBody = petcSteps
+    .map((s, i) => `${i + 1}. ${s.textRu}${s.detailRu ? `\n   ${s.detailRu}` : ''}`)
+    .join('\n\n')
+
+  return [
+    {
+      id: 'doc-seats',
+      folder: 'Справочник',
+      nameRu: 'Обозначение мест',
+      name: 'Seat map colors',
+      bodyRu: seatsBody,
+    },
+    {
+      id: 'doc-remarks',
+      folder: 'Справочник',
+      nameRu: 'Ремарки SSR',
+      name: 'SSR remarks',
+      bodyRu: remarksBody,
+    },
+    {
+      id: 'doc-wch',
+      folder: 'Справочник',
+      nameRu: 'Колясочники WCH*',
+      name: 'Wheelchair codes',
+      bodyRu: wchBody,
+    },
+    {
+      id: 'doc-weap',
+      folder: 'Процедуры',
+      nameRu: 'Процедура WEAP (оружие)',
+      name: 'WEAP checklist',
+      bodyRu: weapBody,
+    },
+    {
+      id: 'doc-petc',
+      folder: 'Процедуры',
+      nameRu: 'Процедура PETC (животное)',
+      name: 'PETC checklist',
+      bodyRu: petcBody,
+    },
+  ]
+}
+
+const articles = buildArticles()
 
 export function Documents() {
+  const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
   const [previewId, setPreviewId] = useState<string | null>(null)
 
-  const folders = Array.from(new Set(documents.map((doc) => doc.folder)))
-  const filteredDocs = documents.filter(
+  const folders = Array.from(new Set(articles.map((doc) => doc.folder)))
+  const filteredDocs = articles.filter(
     (doc) =>
       (selectedFolder ? doc.folder === selectedFolder : true) &&
       (doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         doc.nameRu.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        doc.folder.toLowerCase().includes(searchQuery.toLowerCase()))
+        doc.folder.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        doc.bodyRu.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-  }
-
-  const preview = documents.find((d) => d.id === previewId)
+  const preview = articles.find((d) => d.id === previewId)
 
   if (preview) {
     return (
@@ -36,31 +108,19 @@ export function Documents() {
               ← Назад
             </Button>
             <h1 className="text-h2 text-lavender-100 mt-2">{preview.nameRu}</h1>
-            <p className="text-caption text-navy-400">
-              {preview.type.toUpperCase()} · {formatFileSize(preview.size)}
-            </p>
+            <p className="text-caption text-navy-400">Открыто в приложении · {preview.folder}</p>
           </div>
         </header>
-        <main className="page-wrap py-6">
-          <Card variant="elevated" className="p-6 min-h-[420px] flex flex-col bg-[#2a2a32] border-lavender-500/30">
-            <div className="flex-1 flex flex-col items-center justify-center text-center">
-              <FileText className="w-14 h-14 text-lavender-400 mb-4" />
-              <p className="text-[15px] text-navy-300 max-w-[260px]">
-                Просмотр файла. Zoom и поиск по PDF — в следующей версии.
-              </p>
-              <p className="text-caption text-navy-400 mt-4">
-                Автор: {preview.uploadedBy} ·{' '}
-                {new Date(preview.uploadedAt).toLocaleDateString('ru-RU')}
-              </p>
-            </div>
-            <div className="flex gap-2 mt-6">
-              <Button className="flex-1" variant="secondary">
-                <Download className="w-4 h-4 mr-2" />
-                Offline
-              </Button>
-              <Button className="flex-1">Поделиться</Button>
-            </div>
-          </Card>
+        <main className="page-wrap py-4 sm:py-6">
+          <article className="rounded-2xl border border-lavender-500/30 bg-[#2a2a32] p-4 sm:p-6">
+            <pre className="whitespace-pre-wrap break-words text-[14px] sm:text-[15px] leading-relaxed text-lavender-100 font-sans">
+              {preview.bodyRu}
+            </pre>
+          </article>
+          <Button className="mt-4 w-full sm:w-auto" variant="secondary" onClick={() => navigate('/knowledge')}>
+            <BookOpen className="w-4 h-4 mr-2" />
+            Открыть полный справочник
+          </Button>
         </main>
       </div>
     )
@@ -73,7 +133,7 @@ export function Documents() {
           <h1 className="text-h1 text-lavender-200 mb-3">Документы</h1>
           <div className="relative">
             <Input
-              placeholder="Поиск по названию…"
+              placeholder="Поиск по тексту…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-11"
@@ -83,13 +143,38 @@ export function Documents() {
         </div>
       </header>
 
-      <main className="page-wrap py-4 sm:py-5">
+      <main className="page-wrap py-4 sm:py-5 space-y-5">
+        <button
+          type="button"
+          onClick={() => navigate('/knowledge/airlines')}
+          className="w-full text-left rounded-2xl border border-lavender-400/40 bg-lavender-600/15 p-4"
+        >
+          <div className="text-[15px] font-bold text-lavender-100">Памятки авиакомпаний LED</div>
+          <p className="text-[13px] text-navy-300 mt-1">
+            DP, SU/FV, HY, TK… — текст открывается сразу в приложении, без PDF
+          </p>
+        </button>
+
+        <div className="grid gap-2 sm:grid-cols-2">
+          {knowledgeSections.slice(0, 5).map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => navigate(`/knowledge/${s.id}`)}
+              className="text-left rounded-xl border border-lavender-500/25 bg-[#2a2a32] px-3 py-3"
+            >
+              <span className="mr-2">{s.icon}</span>
+              <span className="text-[13px] font-semibold text-lavender-100">{s.titleRu}</span>
+            </button>
+          ))}
+        </div>
+
         {!selectedFolder && !searchQuery && (
-          <section className="mb-6">
+          <section>
             <h2 className="text-h2 text-lavender-200 mb-3">Папки</h2>
             <div className="grid gap-2 sm:grid-cols-2">
               {folders.map((folder) => {
-                const count = documents.filter((doc) => doc.folder === folder).length
+                const count = articles.filter((doc) => doc.folder === folder).length
                 return (
                   <Card
                     key={folder}
@@ -103,7 +188,7 @@ export function Documents() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-lavender-100 truncate">{folder}</h3>
-                        <p className="text-caption text-navy-400">{count} документов</p>
+                        <p className="text-caption text-navy-400">{count} материалов</p>
                       </div>
                     </div>
                   </Card>
@@ -125,7 +210,12 @@ export function Documents() {
 
           <div className="space-y-2">
             {(selectedFolder || searchQuery ? filteredDocs : []).map((doc) => (
-              <Card key={doc.id} variant="elevated" className="p-4 bg-[#2a2a32] border-lavender-500/30">
+              <button
+                key={doc.id}
+                type="button"
+                onClick={() => setPreviewId(doc.id)}
+                className="w-full text-left rounded-2xl border border-lavender-500/30 bg-[#2a2a32] p-4"
+              >
                 <div className="flex items-start gap-3">
                   <div className="w-11 h-11 rounded-xl bg-lavender-600/25 flex items-center justify-center shrink-0">
                     <FileText className="w-5 h-5 text-lavender-300" />
@@ -133,25 +223,17 @@ export function Documents() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-lavender-100 truncate">{doc.nameRu}</h3>
                     <p className="text-caption text-navy-400 truncate">{doc.name}</p>
-                    <div className="flex items-center gap-2 mt-1.5 text-[12px] text-navy-400">
-                      <span>{formatFileSize(doc.size)}</span>
-                      <span>·</span>
-                      <span>{new Date(doc.uploadedAt).toLocaleDateString('ru-RU')}</span>
-                    </div>
+                    <p className="text-[12px] text-lavender-400 mt-1">Открыть в приложении →</p>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => setPreviewId(doc.id)}>
-                    <Eye className="w-5 h-5" />
-                  </Button>
                 </div>
-              </Card>
+              </button>
             ))}
           </div>
 
           {(selectedFolder || searchQuery) && filteredDocs.length === 0 && (
             <div className="text-center py-14">
               <FileText className="w-10 h-10 mx-auto text-navy-300 mb-3" />
-              <h3 className="text-[16px] font-semibold mb-1 text-lavender-100">Документы не найдены</h3>
-              <p className="text-navy-500 text-[14px]">Измените запрос или папку</p>
+              <h3 className="text-[16px] font-semibold mb-1 text-lavender-100">Ничего не найдено</h3>
             </div>
           )}
         </section>
