@@ -3,11 +3,11 @@ import zipfile
 import re
 import json
 import shutil
+import xml.etree.ElementTree as ET
 
 src = Path(r"C:/Users/Admin/Downloads/для  проекта пулково")
 out_pub = Path(r"C:/Users/Admin/Desktop/SkyHelper/public/ops")
 out_pub.mkdir(parents=True, exist_ok=True)
-out_data = Path(r"C:/Users/Admin/Desktop/SkyHelper/src/data")
 
 imgs = []
 for i, p in enumerate(sorted(src.glob("photo_*.jpg"))):
@@ -17,17 +17,47 @@ for i, p in enumerate(sorted(src.glob("photo_*.jpg"))):
 print("images", len(imgs))
 
 
+W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+
+
+def para_text(p) -> str:
+    parts = []
+    for el in p.iter():
+        if el.tag == W + "t":
+            parts.append(el.text or "")
+        elif el.tag == W + "tab":
+            parts.append("\t")
+        elif el.tag in (W + "br", W + "cr"):
+            parts.append("\n")
+    return "".join(parts).strip()
+
+
+def block_lines(parent) -> list[str]:
+    lines = []
+    for el in parent:
+        if el.tag == W + "p":
+            t = para_text(el)
+            if t:
+                lines.append(t)
+        elif el.tag == W + "tbl":
+            for tr in el.iter(W + "tr"):
+                cells = [" ".join(block_lines(tc)) for tc in tr.findall(W + "tc")]
+                row = " | ".join(c for c in cells if c)
+                if row:
+                    lines.append(row)
+        elif el.tag == W + "sdt":
+            content = el.find(W + "sdtContent")
+            if content is not None:
+                lines.extend(block_lines(content))
+    return lines
+
+
 def docx_text(path: Path) -> str:
     try:
         with zipfile.ZipFile(path) as z:
-            xml = z.read("word/document.xml").decode("utf-8", errors="ignore")
-        texts = re.findall(r"<w:t[^>]*>(.*?)</w:t>", xml)
-        raw = "\n".join(
-            t.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", '"')
-            for t in texts
-        )
-        lines = [ln.strip() for ln in raw.splitlines() if ln.strip()]
-        return "\n".join(lines)
+            root = ET.fromstring(z.read("word/document.xml"))
+        body = root.find(W + "body")
+        return "\n".join(block_lines(body))
     except Exception as e:
         return f"[не удалось прочитать: {e}]"
 
@@ -45,13 +75,13 @@ for p in sorted(src.glob("*.docx")):
             "fileName": p.name,
             "titleRu": stem,
             "airlineCode": code,
-            "bodyRu": text[:14000],
+            "bodyRu": text,
             "chars": len(text),
         }
     )
 
 payload = {"images": imgs, "airlineGuides": guides}
-(out_data / "pulkovoGuides.json").write_text(
+(out_pub / "airline-guides.json").write_text(
     json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
 )
 print("guides", len(guides))
