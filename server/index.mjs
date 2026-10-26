@@ -64,7 +64,11 @@ function sendFile(res, filePath) {
   const data = fs.readFileSync(filePath)
   res.writeHead(200, {
     'Content-Type': type,
-    'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=86400',
+    // Only Vite's hashed bundles in dist/assets are safe to cache long-term;
+    // public/ files (e.g. ops/airline-guides.json) keep the same name across deploys.
+    'Cache-Control': filePath.startsWith(path.join(DIST, 'assets'))
+      ? 'public, max-age=31536000, immutable'
+      : 'no-cache',
   })
   res.end(data)
 }

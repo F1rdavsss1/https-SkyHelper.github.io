@@ -125,7 +125,7 @@ export function KnowledgeSection() {
   useEffect(() => {
     if (sectionId !== 'airlines' && sectionId !== 'seats') return
     setLoadingGuides(true)
-    fetch('/ops/airline-guides.json')
+    fetch('/ops/airline-guides.json', { cache: 'no-cache' })
       .then((r) => r.json())
       .then((data: GuidesPayload) => {
         setGuides(data.airlineGuides ?? [])
