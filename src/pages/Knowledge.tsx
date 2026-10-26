@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, ChevronRight, Search } from 'lucide-react'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { ArrowLeft, ChevronRight, Search, X } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 import { AirlineAvatar, AirlineGuideView } from '../components/AirlineGuideView'
-import { CELL_BR, guideDisplayName, parseGuide, type RawBlock } from '../lib/airlineGuide'
+import { CELL_BR, guideDisplayName, parseGuide } from '../lib/airlineGuide'
+import { parseDsl } from '../lib/opsDsl'
+import { loadAirlineGuides, type AirlineGuide } from '../lib/guidesStore'
+import { dslDocs, hubGroups } from '../data/ops/catalog'
+import { loadFileDocs } from './OpsDocPage'
 import {
   knowledgeSections,
   petcSteps,
@@ -13,21 +17,6 @@ import {
   weapSteps,
   wheelchairCodes,
 } from '../data/opsKnowledge'
-
-type AirlineGuide = {
-  id: string
-  titleRu: string
-  airlineCode?: string | null
-  bodyRu: string
-  blocks: RawBlock[]
-  header?: string
-  fileName?: string
-}
-
-type GuidesPayload = {
-  images: string[]
-  airlineGuides: AirlineGuide[]
-}
 
 /** Фрагмент текста вокруг первого совпадения: [до, совпадение, после] */
 function matchSnippet(body: string, query: string): [string, string, string] | null {
@@ -97,29 +86,145 @@ function Checklist({ steps }: { steps: { id: string; textRu: string; detailRu?: 
   )
 }
 
+type SearchHit = { key: string; icon: string; title: string; kind: string; to: string; snippet: [string, string, string] | null }
+
+/** Плоский текст из формата opsDsl — для поиска и фрагментов */
+function dslPlain(text: string) {
+  return text.replace(/\*\*|==|<br>|^#+\s|^[!>]\s/gm, ' ').replace(/\|/g, ' · ')
+}
+
+function useGlobalSearch(query: string) {
+  const [hits, setHits] = useState<SearchHit[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const q = query.trim()
+    if (q.length < 2) {
+      setHits([])
+      return
+    }
+    let alive = true
+    setLoading(true)
+    const needle = q.toLowerCase()
+    const enc = encodeURIComponent(q)
+    Promise.all([loadAirlineGuides(), loadFileDocs()]).then(([guides, files]) => {
+      if (!alive) return
+      const out: SearchHit[] = []
+      for (const d of dslDocs) {
+        const plain = dslPlain(d.text)
+        if (`${d.title} ${plain}`.toLowerCase().includes(needle)) {
+          out.push({ key: d.id, icon: d.icon, title: d.title, kind: 'Справочник', to: `/knowledge/doc/${d.id}?q=${enc}`, snippet: matchSnippet(plain, q) })
+        }
+      }
+      for (const f of files) {
+        if (`${f.titleRu} ${f.bodyRu}`.toLowerCase().includes(needle)) {
+          out.push({ key: f.id, icon: '📄', title: f.titleRu, kind: 'Документ', to: `/knowledge/doc/${f.id}?q=${enc}`, snippet: matchSnippet(f.bodyRu, q) })
+        }
+      }
+      for (const g of guides.airlineGuides) {
+        const body = g.dsl ? dslPlain(g.dsl) : g.bodyRu
+        if (`${g.titleRu} ${g.airlineCode ?? ''} ${body}`.toLowerCase().includes(needle)) {
+          out.push({ key: g.id, icon: '✈️', title: g.titleRu, kind: 'Памятка АК', to: `/knowledge/airlines/${g.id}?q=${enc}`, snippet: matchSnippet(body, q) })
+        }
+      }
+      setHits(out)
+      setLoading(false)
+    })
+    return () => {
+      alive = false
+    }
+  }, [query])
+
+  return { hits, loading }
+}
+
 export function KnowledgeHub() {
   const navigate = useNavigate()
+  const [q, setQ] = useState('')
+  const { hits, loading } = useGlobalSearch(q)
+  const searching = q.trim().length >= 2
+
   return (
     <div className="min-h-dvh page-pad app-bg">
       <header className="sticky top-0 z-40 glass border-b border-lavender-500/25 safe-top">
         <div className="page-wrap py-3 sm:py-4">
           <h1 className="text-h1 text-lavender-200">Справочник агента</h1>
-          <p className="text-[12px] text-navy-400 mt-1">Места, ремарки, коляски, WEAP / PETC, памятки АК</p>
+          <p className="text-[12px] text-navy-400 mt-1 mb-3">Памятки АК, посадка, Astra, ремарки, багаж, документы, телефоны</p>
+          <div className="relative">
+            <Input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Искать везде: WCLB, неявка, 0GP, коляска, Nordwind…"
+              className="pl-11 pr-10"
+            />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" />
+            {q && (
+              <button
+                type="button"
+                onClick={() => setQ('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-navy-300"
+                aria-label="Очистить"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </header>
-      <main className="page-wrap py-4 sm:py-5 grid gap-3 sm:grid-cols-2">
-        {knowledgeSections.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => navigate(`/knowledge/${s.id}`)}
-            className="text-left rounded-2xl border border-lavender-500/30 bg-[#2a2a32] p-4 active:scale-[0.99] transition-transform"
-          >
-            <div className="text-2xl mb-2">{s.icon}</div>
-            <div className="text-[16px] font-semibold text-lavender-100">{s.titleRu}</div>
-            <div className="text-[13px] text-navy-400 mt-1">{s.descriptionRu}</div>
-          </button>
-        ))}
+
+      <main className="page-wrap py-4 sm:py-5 space-y-6">
+        {searching ? (
+          <section className="space-y-2">
+            <p className="text-[12px] text-navy-400">{loading ? 'Ищу…' : `Найдено: ${hits.length}`}</p>
+            {hits.map((h) => (
+              <button
+                key={h.kind + h.key}
+                type="button"
+                onClick={() => navigate(h.to)}
+                className="w-full text-left rounded-2xl border border-lavender-500/25 bg-[#2a2a32] p-3.5 hover:border-lavender-400/50"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-[18px]">{h.icon}</span>
+                  <span className="text-[15px] font-semibold text-lavender-100 flex-1 min-w-0 truncate">{h.title}</span>
+                  <span className="text-[11px] text-navy-400 shrink-0">{h.kind}</span>
+                </div>
+                {h.snippet && (
+                  <p className="text-[12.5px] text-navy-300 mt-1.5 leading-snug line-clamp-2">
+                    …{h.snippet[0]}
+                    <mark className="rounded px-0.5 bg-amber-300/80 text-navy-950">{h.snippet[1]}</mark>
+                    {h.snippet[2]}…
+                  </p>
+                )}
+              </button>
+            ))}
+            {!loading && !hits.length && <p className="text-center text-navy-400 py-10">Ничего не найдено</p>}
+          </section>
+        ) : (
+          hubGroups.map((g) => (
+            <section key={g.title}>
+              <h2 className="text-[12px] font-semibold uppercase tracking-wider text-lavender-300 mb-2.5">{g.title}</h2>
+              <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                {g.items.map((s) => (
+                  <button
+                    key={s.to}
+                    type="button"
+                    onClick={() => navigate(s.to)}
+                    className="group flex gap-3 text-left rounded-2xl border border-lavender-500/25 bg-[#2a2a32] p-3.5 hover:border-lavender-400/50 active:scale-[0.99] transition"
+                  >
+                    <span className="w-10 h-10 shrink-0 rounded-xl bg-lavender-600/20 border border-lavender-500/25 flex items-center justify-center text-[20px]">
+                      {s.icon}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[15px] font-semibold text-lavender-100">{s.title}</span>
+                      <span className="block text-[12.5px] text-navy-400 mt-0.5 leading-snug">{s.description}</span>
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-navy-500 group-hover:text-lavender-300 mt-1 shrink-0" />
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))
+        )}
       </main>
     </div>
   )
@@ -137,15 +242,10 @@ export function KnowledgeSection() {
   useEffect(() => {
     if (sectionId !== 'airlines' && sectionId !== 'seats') return
     setLoadingGuides(true)
-    fetch('/ops/airline-guides.json', { cache: 'no-cache' })
-      .then((r) => r.json())
-      .then((data: GuidesPayload) => {
-        setGuides(data.airlineGuides ?? [])
-        setImages(data.images ?? [])
-      })
-      .catch(() => {
-        setGuides([])
-        setImages([])
+    loadAirlineGuides()
+      .then((data) => {
+        setGuides(data.airlineGuides)
+        setImages(data.images)
       })
       .finally(() => setLoadingGuides(false))
   }, [sectionId])
@@ -176,7 +276,7 @@ export function KnowledgeSection() {
     () =>
       new Map(
         guides.map((g) => {
-          const p = parseGuide(g.blocks ?? [])
+          const p = g.dsl ? { meta: g.meta ?? {}, sections: parseDsl(g.dsl) } : parseGuide(g.blocks ?? [])
           return [g.id, { date: p.meta.date, sections: p.sections.map((s) => s.title).filter((t) => t !== 'Общее') }]
         }),
       ),
@@ -184,6 +284,7 @@ export function KnowledgeSection() {
   )
 
   const openGuide = guides.find((g) => g.id === guideId)
+  const [params] = useSearchParams()
 
   if (!section) {
     return (
@@ -220,8 +321,12 @@ export function KnowledgeSection() {
           <AirlineGuideView
             title={openGuide.titleRu}
             code={openGuide.airlineCode}
-            blocks={openGuide.blocks ?? []}
+            blocks={openGuide.blocks}
+            dsl={openGuide.dsl}
+            meta={openGuide.meta}
             header={openGuide.header}
+            sourceNote={openGuide.sourceNote}
+            initialQuery={params.get('q') ?? ''}
           />
         </main>
       </div>

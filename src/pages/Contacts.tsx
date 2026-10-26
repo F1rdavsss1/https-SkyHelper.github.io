@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
@@ -17,7 +17,8 @@ const emptyForm = {
   airline: '',
 }
 
-export function Contacts() {
+/** Личные контакты агента (хранятся в браузере). `tabs` — переключатель «Пулково / Мои» из ContactsHub */
+export function MyContacts({ tabs }: { tabs?: ReactNode }) {
   const { contacts, addContact, removeContact, updateContact } = useContacts()
   const [searchQuery, setSearchQuery] = useState('')
   const [copied, setCopied] = useState<string | null>(null)
@@ -71,7 +72,7 @@ export function Contacts() {
       <header className="sticky top-0 z-40 glass border-b border-lavender-500/25 safe-top">
         <div className="page-wrap py-3 sm:py-4">
           <div className="flex items-center justify-between gap-3 mb-3">
-            <h1 className="text-h1 text-lavender-200">Контакты</h1>
+            <h1 className="text-h1 text-lavender-200">Связь</h1>
             <Button
               size="sm"
               onClick={() => {
@@ -83,6 +84,7 @@ export function Contacts() {
               {showForm ? 'Закрыть' : 'Добавить'}
             </Button>
           </div>
+          {tabs}
           <div className="relative">
             <Input
               placeholder="Поиск по имени, должности…"

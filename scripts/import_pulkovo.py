@@ -16,13 +16,35 @@ import subprocess
 import zipfile
 import xml.etree.ElementTree as ET
 
-src = Path(r"C:/Users/Admin/Downloads/для  проекта пулково")
+# Папки-источники по приоритету: файл с тем же именем берётся из первой, где он есть
+SOURCES = [
+    Path(r"C:/Users/Admin/Documents/for pulk"),
+    Path(r"C:/Users/Admin/Downloads/для  проекта пулково"),
+]
 out_pub = Path(r"C:/Users/Admin/Desktop/SkyHelper/public/ops")
 out_img = out_pub / "guides"
 out_pub.mkdir(parents=True, exist_ok=True)
 
+files: dict[str, Path] = {}
+for folder in SOURCES:
+    if folder.exists():
+        for p in sorted(folder.iterdir()):
+            if p.is_file():
+                files.setdefault(p.name, p)
+
+# Документы из папки, которые не памятки авиакомпаний → отдельные разделы справочника
+OPS_DOCX = {
+    "PASSENGER_AGENT_VOCABULARY 2026.docx": ("vocabulary", "Словарь агента EN–RU"),
+    "Готовая памятка по авихам.docx": ("avih-checklist", "AVIH: инструкция по оформлению"),
+    "Тестирование Amadeus.docx": ("amadeus-test", "Тестирование Amadeus Altea"),
+}
+# Excel-памятки авиакомпаний: имя файла → (id, заголовок, код АК)
+AIRLINE_XLSX = {
+    "DP  памятка Астра.xlsx": ("dp-astra-xlsx", "DP Победа — памятка Астра (Excel)", "DP"),
+}
+
 imgs = []
-for i, p in enumerate(sorted(src.glob("photo_*.jpg"))):
+for i, p in enumerate(sorted(p for n, p in files.items() if re.match(r"photo_.*\.jpg$", n))):
     name = f"seat-map-{i + 1}.jpg"
     shutil.copy2(p, out_pub / name)
     imgs.append("/ops/" + name)
@@ -337,43 +359,136 @@ def convert_emf(paths: list[Path]):
         p.unlink()
 
 
-if out_img.exists():
-    shutil.rmtree(out_img)
+XS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 
-guides = []
-emf: list[Path] = []
-for p in sorted(src.glob("*.docx")):
-    stem = p.stem.replace("  ", " ").strip()
-    m = re.match(r"^([A-Za-z0-9]{1,3})\b", stem)
-    code = m.group(1).upper() if m else None
-    gid = re.sub(r"[^a-zA-Z0-9]+", "-", stem).strip("-").lower()[:60]
-    doc = Doc(p, gid)
-    body = ET.fromstring(doc.z.read("word/document.xml")).find(W + "body")
-    blocks = blocks_of(body, doc)
-    emf.extend(doc.emf)
-    text = plain(blocks)
+
+def col_index(ref: str) -> int:
+    n = 0
+    for ch in re.match(r"[A-Z]+", ref).group(0):
+        n = n * 26 + ord(ch) - 64
+    return n - 1
+
+
+def xlsx_blocks(path: Path) -> list:
+    """Лист Excel → блоки: строки только с колонкой A — абзацы, остальные — таблица как в Excel."""
+    z = zipfile.ZipFile(path)
+    shared = []
+    if "xl/sharedStrings.xml" in z.namelist():
+        for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall(XS + "si"):
+            shared.append("".join(t.text or "" for t in si.iter(XS + "t")))
+    blocks: list = []
+    for name in sorted(n for n in z.namelist() if re.match(r"xl/worksheets/sheet\d+\.xml$", n)):
+        sheet = ET.fromstring(z.read(name))
+        merged = {}
+        for mc in sheet.iter(XS + "mergeCell"):
+            a, b = mc.get("ref").split(":")
+            merged[a] = col_index(b) - col_index(a) + 1
+        grid: list[list[tuple[str, int]]] = []
+        width = 0
+        for row in sheet.iter(XS + "row"):
+            cells: dict[int, tuple[str, int]] = {}
+            for c in row.findall(XS + "c"):
+                v = c.find(XS + "v")
+                t = c.get("t")
+                if t == "s" and v is not None:
+                    val = shared[int(v.text)]
+                elif t == "inlineStr":
+                    val = "".join(x.text or "" for x in c.iter(XS + "t"))
+                else:
+                    val = v.text if v is not None else ""
+                cells[col_index(c.get("r"))] = (val.strip(), merged.get(c.get("r"), 1))
+            filled = {k: v for k, v in cells.items() if v[0]}
+            if not filled:
+                continue
+            width = max(width, max(filled) + 1)
+            grid.append([cells.get(i, ("", 1)) for i in range(max(filled) + 1)])
+        rows: list = []
+
+        def flush():
+            if rows:
+                blocks.append({"t": "table", "rows": [r + [{"c": []}] * (width - sum(c.get("cs", 1) for c in r)) for r in rows]})
+                rows.clear()
+
+        for r in grid:
+            texts = [t for t, _ in r]
+            if texts[0] and not any(texts[1:]):
+                flush()
+                blocks.append({"t": "p", "runs": [{"x": texts[0]}]})
+                continue
+            row, skip = [], 0
+            for t, span in r:
+                if skip:
+                    skip -= 1
+                    continue
+                cell = {"c": [{"t": "p", "runs": [{"x": t}]}] if t else []}
+                if span > 1:
+                    cell["cs"] = span
+                    skip = span - 1
+                row.append(cell)
+            rows.append(row)
+        flush()
+    return blocks
+
+
+def docx_header(doc: "Doc") -> str:
     # Колонтитулы (например «Check-in Guide (eff. 13.08.2021)») — в сведения об источнике
-    header = " ".join(
+    return " ".join(
         "".join(t.text or "" for t in ET.fromstring(doc.z.read(n)).iter(W + "t")).strip()
         for n in sorted(doc.z.namelist())
         if re.match(r"word/(header|footer)\d*\.xml$", n)
     ).strip()
-    guides.append(
-        {
-            "id": gid,
-            "fileName": p.name,
-            "titleRu": stem,
-            "airlineCode": code,
-            "bodyRu": text,
-            "blocks": blocks,
-            **({"header": header} if header else {}),
-        }
-    )
 
+
+if out_img.exists():
+    shutil.rmtree(out_img)
+
+guides = []
+ops_docs = []
+emf: list[Path] = []
+for name, p in sorted(files.items()):
+    if p.suffix.lower() != ".docx" or name.startswith("~$"):
+        continue
+    stem = p.stem.replace("  ", " ").strip()
+    ops = OPS_DOCX.get(name)
+    if ops:
+        gid, title, code = ops[0], ops[1], None
+    else:
+        m = re.match(r"^([A-Za-z0-9]{1,3})\b", stem)
+        code = m.group(1).upper() if m else None
+        gid, title = re.sub(r"[^a-zA-Z0-9]+", "-", stem).strip("-").lower()[:60], stem
+    doc = Doc(p, gid)
+    body = ET.fromstring(doc.z.read("word/document.xml")).find(W + "body")
+    blocks = blocks_of(body, doc)
+    emf.extend(doc.emf)
+    header = docx_header(doc)
+    entry = {
+        "id": gid,
+        "fileName": p.name,
+        "titleRu": title,
+        "bodyRu": plain(blocks),
+        "blocks": blocks,
+        **({"header": header} if header else {}),
+    }
+    if ops:
+        ops_docs.append(entry)
+    else:
+        guides.append({**entry, "airlineCode": code})
+
+for name, (gid, title, code) in AIRLINE_XLSX.items():
+    if name in files:
+        blocks = xlsx_blocks(files[name])
+        guides.append(
+            {"id": gid, "fileName": name, "titleRu": title, "airlineCode": code, "bodyRu": plain(blocks), "blocks": blocks}
+        )
+
+guides.sort(key=lambda g: g["titleRu"].lower())
 convert_emf(emf)
 
 payload = {"images": imgs, "airlineGuides": guides}
 (out_pub / "airline-guides.json").write_text(
     json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
 )
-print("guides", len(guides), "images in guides", sum(1 for _ in out_img.rglob("*.*")))
+(out_pub / "ops-docs.json").write_text(
+    json.dumps({"docs": ops_docs}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+)
+print("guides", len(guides), "ops docs", len(ops_docs), "images in guides", sum(1 for _ in out_img.rglob("*.*")))

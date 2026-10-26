@@ -153,8 +153,10 @@ function mapFlight(raw) {
   const terminal = raw.OD_RTRM_CODE ? String(raw.OD_RTRM_CODE) : '1'
   const from = { ...LED_AIRPORT, terminal }
 
-  const desks = raw.OD_COUNTERS && String(raw.OD_COUNTERS).trim() ? String(raw.OD_COUNTERS).trim() : '—'
-  const gate = raw.OD_GATES && String(raw.OD_GATES).trim() ? String(raw.OD_GATES).trim() : '—'
+  // У отменённых рейсов API иногда отдаёт объект вместо строки — показываем прочерк, а не «[object Object]»
+  const text = (v) => (typeof v === 'string' || typeof v === 'number') && String(v).trim() ? String(v).trim() : '—'
+  const desks = text(raw.OD_COUNTERS)
+  const gate = text(raw.OD_GATES)
 
   return {
     id: `led-${raw.OD_ID}`,

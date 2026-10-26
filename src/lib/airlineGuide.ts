@@ -13,6 +13,8 @@ export interface Run {
   hl?: 1
   /** красный шрифт */
   red?: 1
+  /** ссылка (только в разделах, написанных вручную — см. opsDsl.ts) */
+  href?: string
 }
 
 export interface Cell {
@@ -27,7 +29,7 @@ export type RawBlock =
   | { t: 'table'; rows: Cell[][] }
 
 export type GuideBlock =
-  | { kind: 'p'; runs: Run[]; li?: string; lvl?: number; warning: boolean }
+  | { kind: 'p'; runs: Run[]; li?: string; lvl?: number; warning: boolean; note?: boolean }
   | { kind: 'img'; src: string }
   | { kind: 'pairs'; rows: { key: Cell; value: Cell }[] }
   | { kind: 'table'; rows: Cell[][] }
@@ -126,7 +128,7 @@ function splitLeadHeading(block: Extract<RawBlock, { t: 'p' }>): [string, Run[]]
   return [m[1].trim(), rest]
 }
 
-function tableBlock(rows: Cell[][]): GuideBlock {
+export function tableBlock(rows: Cell[][]): GuideBlock {
   const pairs = rows.every((r) => r.length === 2 && r.every((c) => !c.cs && !c.rs))
   if (pairs) return { kind: 'pairs', rows: rows.map(([key, value]) => ({ key, value })) }
   return { kind: 'table', rows }

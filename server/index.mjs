@@ -2,6 +2,8 @@ import http from 'node:http'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import zlib from 'node:zlib'
+import crypto from 'node:crypto'
 import { fetchLedBoard } from './led.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -9,6 +11,9 @@ const ROOT = path.resolve(__dirname, '..')
 const DIST = path.join(ROOT, 'dist')
 const PORT = Number(process.env.PORT || 8787)
 const HOST = process.env.HOST || '0.0.0.0'
+// Пароль на весь сайт (кроме /health): задайте SITE_PASSWORD в настройках Render → Environment.
+// Логин в окне браузера — любой, проверяется только пароль. Без переменной сайт открыт.
+const SITE_PASSWORD = process.env.SITE_PASSWORD || ''
 
 let cache = null
 let cacheAt = 0
@@ -58,18 +63,48 @@ function safeJoin(base, requestPath) {
   return full
 }
 
-function sendFile(res, filePath) {
+function authorized(req) {
+  if (!SITE_PASSWORD) return true
+  const [scheme, value] = (req.headers.authorization || '').split(' ')
+  if (scheme !== 'Basic' || !value) return false
+  const decoded = Buffer.from(value, 'base64').toString('utf8')
+  const pass = Buffer.from(decoded.slice(decoded.indexOf(':') + 1))
+  const want = Buffer.from(SITE_PASSWORD)
+  return pass.length === want.length && crypto.timingSafeEqual(pass, want)
+}
+
+const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.svg', '.map'])
+const gzipCache = new Map()
+
+function sendFile(req, res, filePath) {
   const ext = path.extname(filePath).toLowerCase()
   const type = MIME[ext] || 'application/octet-stream'
-  const data = fs.readFileSync(filePath)
-  res.writeHead(200, {
+  const stat = fs.statSync(filePath)
+  const etag = `"${stat.size.toString(16)}-${Math.floor(stat.mtimeMs).toString(16)}"`
+  const headers = {
     'Content-Type': type,
+    ETag: etag,
+    Vary: 'Accept-Encoding',
     // Only Vite's hashed bundles in dist/assets are safe to cache long-term;
     // public/ files (e.g. ops/airline-guides.json) keep the same name across deploys.
     'Cache-Control': filePath.startsWith(path.join(DIST, 'assets'))
       ? 'public, max-age=31536000, immutable'
       : 'no-cache',
-  })
+  }
+  // no-cache + ETag: браузер перепроверяет файл, но скачивает заново только если он изменился
+  if (req.headers['if-none-match'] === etag) {
+    res.writeHead(304, headers)
+    res.end()
+    return
+  }
+  let data = fs.readFileSync(filePath)
+  if (COMPRESSIBLE.has(ext) && /gzip/.test(req.headers['accept-encoding'] || '')) {
+    const key = filePath + etag
+    if (!gzipCache.has(key)) gzipCache.set(key, zlib.gzipSync(data))
+    data = gzipCache.get(key)
+    headers['Content-Encoding'] = 'gzip'
+  }
+  res.writeHead(200, headers)
   res.end(data)
 }
 
@@ -84,7 +119,7 @@ function tryStatic(req, res, pathname) {
   }
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    sendFile(res, filePath)
+    sendFile(req, res, filePath)
     return true
   }
 
@@ -92,7 +127,7 @@ function tryStatic(req, res, pathname) {
   if (!pathname.startsWith('/api') && req.method === 'GET') {
     const index = path.join(DIST, 'index.html')
     if (fs.existsSync(index)) {
-      sendFile(res, index)
+      sendFile(req, res, index)
       return true
     }
   }
@@ -110,6 +145,15 @@ const server = http.createServer(async (req, res) => {
 
     if (url.pathname === '/health') {
       sendJson(res, 200, { status: 'ok', service: 'aerodesk' })
+      return
+    }
+
+    if (!authorized(req)) {
+      res.writeHead(401, {
+        'WWW-Authenticate': 'Basic realm="AeroDesk", charset="UTF-8"',
+        'Content-Type': 'text/plain; charset=utf-8',
+      })
+      res.end('Нужен пароль AeroDesk')
       return
     }
 

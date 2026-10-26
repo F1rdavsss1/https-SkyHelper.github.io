@@ -10,7 +10,10 @@ import { FlightDetails } from './pages/FlightDetails'
 import { SpecialPassengers } from './pages/SpecialPassengers'
 import { PassengerGuide } from './pages/PassengerGuide'
 import { Documents } from './pages/Documents'
-import { Contacts } from './pages/Contacts'
+import { ContactsHub } from './pages/ContactsHub'
+import { OpsDocPage } from './pages/OpsDocPage'
+import { TerminalMapPage } from './pages/TerminalMapPage'
+import { AirlineCodesPage } from './pages/AirlineCodesPage'
 import { Settings } from './pages/Settings'
 import { More } from './pages/More'
 import { Notifications } from './pages/Notifications'
@@ -46,7 +49,7 @@ function App() {
                 <Route path="/flights" element={<Flights />} />
                 <Route path="/flights/:id" element={<FlightDetails />} />
                 <Route path="/documents" element={<Documents />} />
-                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/contacts" element={<ContactsHub />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/more" element={<More />} />
                 <Route path="/notifications" element={<Notifications />} />
@@ -54,6 +57,9 @@ function App() {
                 <Route path="/special-passengers" element={<SpecialPassengers />} />
                 <Route path="/special-passengers/:id" element={<PassengerGuide />} />
                 <Route path="/knowledge" element={<KnowledgeHub />} />
+                <Route path="/knowledge/doc/:docId" element={<OpsDocPage />} />
+                <Route path="/knowledge/terminal" element={<TerminalMapPage />} />
+                <Route path="/knowledge/codes" element={<AirlineCodesPage />} />
                 <Route path="/knowledge/:sectionId/:guideId" element={<KnowledgeSection />} />
                 <Route path="/knowledge/:sectionId" element={<KnowledgeSection />} />
               </Route>
