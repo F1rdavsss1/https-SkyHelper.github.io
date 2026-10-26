@@ -17,6 +17,7 @@ for i, p in enumerate(sorted(src.glob("photo_*.jpg"))):
 print("images", len(imgs))
 
 
+CELL_BR = chr(0x2028)  # перенос строки внутри ячейки таблицы
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
 
@@ -41,7 +42,11 @@ def block_lines(parent) -> list[str]:
                 lines.append(t)
         elif el.tag == W + "tbl":
             for tr in el.iter(W + "tr"):
-                cells = [" ".join(block_lines(tc)) for tc in tr.findall(W + "tc")]
+                # Переносы внутри ячейки — U+2028, чтобы строка таблицы оставалась одной строкой
+                cells = [
+                    CELL_BR.join(block_lines(tc)).replace(chr(10), CELL_BR)
+                    for tc in tr.findall(W + "tc")
+                ]
                 row = " | ".join(c for c in cells if c)
                 if row:
                     lines.append(row)

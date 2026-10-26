@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Search } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Search } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
+import { AirlineAvatar, AirlineGuideView } from '../components/AirlineGuideView'
+import { CELL_BR, guideDisplayName, parseGuide } from '../lib/airlineGuide'
 import {
   knowledgeSections,
   petcSteps,
@@ -23,6 +25,14 @@ type AirlineGuide = {
 type GuidesPayload = {
   images: string[]
   airlineGuides: AirlineGuide[]
+}
+
+/** Фрагмент текста вокруг первого совпадения: [до, совпадение, после] */
+function matchSnippet(body: string, query: string): [string, string, string] | null {
+  const text = body.split(CELL_BR).join(' ').split(' | ').join(' · ')
+  const i = text.toLowerCase().indexOf(query.toLowerCase())
+  if (i < 0) return null
+  return [text.slice(Math.max(0, i - 50), i), text.slice(i, i + query.length), text.slice(i + query.length, i + query.length + 90)]
 }
 
 function SeatSwatch({
@@ -160,6 +170,17 @@ export function KnowledgeSection() {
     )
   }, [guides, q])
 
+  const guideInfo = useMemo(
+    () =>
+      new Map(
+        guides.map((g) => {
+          const p = parseGuide(g.bodyRu)
+          return [g.id, { date: p.meta.date, sections: p.sections.map((s) => s.title).filter((t) => t !== 'Общее') }]
+        }),
+      ),
+    [guides],
+  )
+
   const openGuide = guides.find((g) => g.id === guideId)
 
   if (!section) {
@@ -194,11 +215,7 @@ export function KnowledgeSection() {
           </div>
         </header>
         <main className="page-wrap py-4">
-          <article className="rounded-2xl border border-lavender-500/25 bg-[#2a2a32] p-4 sm:p-5">
-            <pre className="whitespace-pre-wrap break-words text-[14px] leading-relaxed text-lavender-100 font-sans">
-              {openGuide.bodyRu || 'Текст памятки пуст'}
-            </pre>
-          </article>
+          <AirlineGuideView title={openGuide.titleRu} code={openGuide.airlineCode} body={openGuide.bodyRu} />
         </main>
       </div>
     )
@@ -337,25 +354,60 @@ export function KnowledgeSection() {
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" />
             </div>
             {loadingGuides && <p className="text-[13px] text-navy-400">Загрузка памяток…</p>}
-            <div className="space-y-2">
-              {filteredAirlines.map((g) => (
-                <button
-                  key={g.id}
-                  type="button"
-                  onClick={() => navigate(`/knowledge/airlines/${g.id}`)}
-                  className="w-full text-left rounded-2xl border border-lavender-500/25 bg-[#2a2a32] p-4 active:scale-[0.99]"
-                >
-                  <div className="flex items-center gap-2">
-                    {g.airlineCode && (
-                      <span className="px-2 py-1 rounded-lg bg-lavender-600/30 text-lavender-200 text-[12px] font-bold">
-                        {g.airlineCode}
-                      </span>
+            {!loadingGuides && guides.length > 0 && (
+              <p className="text-[12px] text-navy-400">
+                {q.trim() ? `Найдено: ${filteredAirlines.length} из ${guides.length}` : `${guides.length} памяток`}
+              </p>
+            )}
+            <div className="grid gap-2.5 sm:grid-cols-2">
+              {filteredAirlines.map((g) => {
+                const info = guideInfo.get(g.id)
+                const snippet = q.trim() ? matchSnippet(g.bodyRu, q.trim()) : null
+                return (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => navigate(`/knowledge/airlines/${g.id}`)}
+                    className="group w-full text-left rounded-2xl border border-lavender-500/25 bg-[#2a2a32] p-3.5 hover:border-lavender-400/50 active:scale-[0.99] transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <AirlineAvatar code={g.airlineCode} />
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[15px] font-semibold text-lavender-100 truncate">
+                          {guideDisplayName(g.titleRu, g.airlineCode)}
+                        </div>
+                        <div className="text-[12px] text-navy-400 mt-0.5 truncate">
+                          {[info?.date && `обн. ${info.date}`, info && `${info.sections.length} разделов`]
+                            .filter(Boolean)
+                            .join(' · ')}
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-navy-500 group-hover:text-lavender-300 shrink-0" />
+                    </div>
+                    {snippet ? (
+                      <p className="text-[12.5px] text-navy-300 mt-2.5 leading-snug line-clamp-2">
+                        …{snippet[0]}
+                        <mark className="rounded px-0.5 bg-amber-300/80 text-navy-950">{snippet[1]}</mark>
+                        {snippet[2]}…
+                      </p>
+                    ) : (
+                      info &&
+                      info.sections.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2.5">
+                          {info.sections.slice(0, 4).map((s) => (
+                            <span
+                              key={s}
+                              className="rounded-full bg-navy-900/60 border border-lavender-500/15 px-2 py-0.5 text-[11px] text-navy-300"
+                            >
+                              {s}
+                            </span>
+                          ))}
+                        </div>
+                      )
                     )}
-                    <span className="text-[15px] font-semibold text-lavender-100 truncate">{g.titleRu}</span>
-                  </div>
-                  <p className="text-[12px] text-navy-400 mt-1">Открыть текст в приложении →</p>
-                </button>
-              ))}
+                  </button>
+                )
+              })}
               {!loadingGuides && filteredAirlines.length === 0 && (
                 <p className="text-center text-navy-400 py-10">Памятки не найдены</p>
               )}
