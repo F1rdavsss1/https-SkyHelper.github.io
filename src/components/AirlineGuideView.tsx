@@ -1,17 +1,23 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { AlertTriangle, ChevronDown, FileText, Phone, Search, X } from 'lucide-react'
+import { AlertTriangle, Check, ChevronDown, Copy, FileText, Phone, Search, X } from 'lucide-react'
 import { Input } from './ui/Input'
 import { cn } from '../lib/utils'
 import {
   CELL_BR,
   PHONE_RE,
+  SERVICE_CODE_RE,
   SSR_CODES,
   airlineHue,
+  guideBlockText,
   guideDisplayName,
   parseGuide,
   phoneHref,
+  toLatinCode,
+  type Cell,
   type GuideBlock,
   type GuideSection,
+  type RawBlock,
+  type Run,
 } from '../lib/airlineGuide'
 
 export function AirlineAvatar({ code, size = 'md' }: { code?: string | null; size?: 'md' | 'lg' }) {
@@ -53,59 +59,114 @@ function escapeRe(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-/** Текст с кликабельными телефонами, бейджами SSR-кодов и подсветкой поиска */
-function Rich({ text, query }: { text: string; query: string }) {
-  const lines = text.split(CELL_BR)
-  const q = query.trim()
-  const re = new RegExp(
-    [PHONE_RE.source, `\\b(?:${[...SSR_CODES].join('|')})\\b`, q && escapeRe(q)].filter(Boolean).join('|'),
-    'gi',
-  )
+const SSR_RE = new RegExp(`(?<![0-9A-Za-z])(?:${[...SSR_CODES].join('|')})(?![0-9A-Za-z])`)
+// Общий regex ниже без учёта регистра — коды проверяем ещё раз строго (только заглавные)
+const SERVICE_CODE_EXACT = new RegExp(`^${SERVICE_CODE_RE.source}$`)
 
+/** Код услуги: моноширинный чип, по нажатию копируется латиницей */
+function ServiceCode({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false)
+  const latin = toLatinCode(code)
+  const wasCyrillic = latin !== code
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation()
+        navigator.clipboard?.writeText(latin).then(
+          () => {
+            setCopied(true)
+            setTimeout(() => setCopied(false), 1200)
+          },
+          () => {},
+        )
+      }}
+      title={
+        wasCyrillic
+          ? `Код ${latin} — в памятке набран кириллицей. Нажмите, чтобы скопировать латиницей`
+          : `Код ${latin} — нажмите, чтобы скопировать`
+      }
+      className="inline-flex items-center gap-1 align-baseline rounded-md px-1.5 py-px mx-px font-mono text-[0.9em] font-bold tracking-wider bg-emerald-400/15 text-emerald-200 border border-emerald-400/40 hover:bg-emerald-400/25"
+    >
+      {latin}
+      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3 opacity-50" />}
+    </button>
+  )
+}
+
+/** Текст с телефонами, кодами услуг, SSR-бейджами и подсветкой поиска */
+function Tokens({ text, query }: { text: string; query: string }) {
+  const q = query.trim()
+  // Поиск первым, чтобы найденное слово подсвечивалось даже внутри кода; «(?!)» — пустая группа
+  const parts = [q ? escapeRe(q) : '(?!)', PHONE_RE.source, SERVICE_CODE_RE.source, SSR_RE.source]
+  const re = new RegExp(parts.map((p) => `(${p})`).join('|'), 'gi')
+
+  const out: ReactNode[] = []
+  let last = 0
+  for (const m of text.matchAll(re)) {
+    const s = m[0]
+    const i = m.index ?? 0
+    if (i > last) out.push(text.slice(last, i))
+    if (m[1]) {
+      out.push(
+        <mark key={i} className="rounded px-0.5 bg-amber-300/80 text-navy-950">
+          {s}
+        </mark>,
+      )
+    } else if (m[2] && /^\+|^[78]/.test(s.trim()) && s.replace(/\D/g, '').length >= 10) {
+      out.push(
+        <a
+          key={i}
+          href={phoneHref(s)}
+          className="inline-flex items-center gap-1 text-lavender-300 underline decoration-lavender-500/50 underline-offset-2 whitespace-nowrap"
+        >
+          <Phone className="w-3.5 h-3.5" />
+          {s.trim()}
+        </a>,
+      )
+    } else if (m[3] && SERVICE_CODE_EXACT.test(s)) {
+      out.push(<ServiceCode key={i} code={s} />)
+    } else if (m[4] && SSR_CODES.has(s)) {
+      out.push(
+        <span
+          key={i}
+          className="inline-block rounded-md px-1.5 py-px mx-px text-[0.85em] font-bold tracking-wide bg-lavender-600/25 text-lavender-200 border border-lavender-500/30"
+        >
+          {s}
+        </span>,
+      )
+    } else {
+      out.push(s)
+    }
+    last = i + s.length
+  }
+  if (last < text.length) out.push(text.slice(last))
+  return <>{out}</>
+}
+
+/** Текст абзаца с разметкой из Word: жирный, маркер, красный, зачёркнутый */
+function Runs({ runs, query }: { runs: Run[]; query: string }) {
   return (
     <>
-      {lines.map((line, li) => {
-        const out: ReactNode[] = []
-        let last = 0
-        for (const m of line.matchAll(re)) {
-          const s = m[0]
-          const i = m.index ?? 0
-          if (i > last) out.push(line.slice(last, i))
-          if (q && s.toLowerCase() === q.toLowerCase()) {
-            out.push(
-              <mark key={i} className="rounded px-0.5 bg-amber-300/80 text-navy-950">
-                {s}
-              </mark>,
-            )
-          } else if (/^\+|^[78]/.test(s.trim()) && s.replace(/\D/g, '').length >= 10) {
-            out.push(
-              <a
-                key={i}
-                href={phoneHref(s)}
-                className="inline-flex items-center gap-1 text-lavender-300 underline decoration-lavender-500/50 underline-offset-2 whitespace-nowrap"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                {s.trim()}
-              </a>,
-            )
-          } else if (SSR_CODES.has(s)) {
-            out.push(
-              <span
-                key={i}
-                className="inline-block rounded-md px-1.5 py-px mx-px text-[0.85em] font-bold tracking-wide bg-lavender-600/25 text-lavender-200 border border-lavender-500/30"
-              >
-                {s}
-              </span>,
-            )
-          } else {
-            out.push(s)
-          }
-          last = i + s.length
-        }
-        if (last < line.length) out.push(line.slice(last))
+      {runs.map((r, i) => {
+        const lines = r.x.split(CELL_BR)
         return (
-          <span key={li} className="block">
-            {out}
+          <span
+            key={i}
+            title={r.s ? 'Зачёркнуто в оригинале памятки' : undefined}
+            className={cn(
+              r.b && 'font-semibold text-lavender-50',
+              r.hl && 'bg-yellow-300/20 text-yellow-50 rounded-sm box-decoration-clone px-0.5',
+              r.red && 'text-red-300',
+              r.s && 'line-through opacity-60',
+            )}
+          >
+            {lines.map((line, li) => (
+              <span key={li}>
+                {li > 0 && <br />}
+                <Tokens text={line} query={query} />
+              </span>
+            ))}
           </span>
         )
       })}
@@ -113,126 +174,151 @@ function Rich({ text, query }: { text: string; query: string }) {
   )
 }
 
+function Paragraph({
+  runs,
+  li,
+  lvl = 0,
+  warning,
+  query,
+}: {
+  runs: Run[]
+  li?: string
+  lvl?: number
+  warning?: boolean
+  query: string
+}) {
+  if (warning) {
+    return (
+      <div className="flex gap-3 rounded-xl border border-amber-400/35 bg-amber-400/10 px-3.5 py-3">
+        <AlertTriangle className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
+        <div className="text-[14px] leading-relaxed text-amber-50 font-medium min-w-0">
+          {li && <span className="mr-1.5 font-semibold">{li}</span>}
+          <Runs runs={runs} query={query} />
+        </div>
+      </div>
+    )
+  }
+  if (li) {
+    return (
+      <div className="flex gap-2 text-[14.5px] leading-relaxed text-lavender-100/90" style={{ paddingLeft: lvl * 18 }}>
+        <span className={cn('shrink-0 min-w-[1.25rem] text-lavender-300', li === '•' ? 'text-center' : 'font-semibold')}>
+          {li}
+        </span>
+        <div className="min-w-0">
+          <Runs runs={runs} query={query} />
+        </div>
+      </div>
+    )
+  }
+  return (
+    <p className="text-[14.5px] leading-relaxed text-lavender-100/90">
+      <Runs runs={runs} query={query} />
+    </p>
+  )
+}
+
+function GuideImage({ src }: { src: string }) {
+  return (
+    <a href={src} target="_blank" rel="noreferrer" className="block">
+      <img
+        src={src}
+        alt="Изображение из памятки"
+        loading="lazy"
+        className="max-w-full max-h-[520px] rounded-xl border border-lavender-500/20 bg-white object-contain"
+      />
+    </a>
+  )
+}
+
+/** Содержимое ячейки таблицы: абзацы, картинки, вложенные таблицы */
+function CellContent({ cell, query }: { cell: Cell; query: string }) {
+  return (
+    <div className="space-y-1.5">
+      {cell.c.map((b: RawBlock, i) => {
+        if (b.t === 'p') return <Paragraph key={i} runs={b.runs} li={b.li} lvl={b.lvl} query={query} />
+        if (b.t === 'img') return <GuideImage key={i} src={b.src} />
+        return <DataTable key={i} rows={b.rows} query={query} />
+      })}
+    </div>
+  )
+}
+
+/** Таблица как в Word: объединённые ячейки сохраняются, пустые остаются пустыми */
+function DataTable({ rows, query }: { rows: Cell[][]; query: string }) {
+  return (
+    <div className="overflow-x-auto rounded-xl border border-lavender-500/25">
+      <table className="w-full text-[13.5px] border-collapse">
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr key={ri} className={cn(ri === 0 && 'bg-lavender-600/15')}>
+              {row.map((cell, ci) => (
+                <td
+                  key={ci}
+                  colSpan={cell.cs}
+                  rowSpan={cell.rs}
+                  className={cn(
+                    'border border-lavender-500/20 px-3 py-2.5 align-top text-lavender-100/90 min-w-[96px]',
+                    ci === 0 && 'bg-navy-900/40',
+                  )}
+                >
+                  <CellContent cell={cell} query={query} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 function Block({ block, query }: { block: GuideBlock; query: string }) {
   switch (block.kind) {
-    case 'text':
-      return (
-        <p className="text-[14.5px] leading-relaxed text-lavender-100/90">
-          <Rich text={block.text} query={query} />
-        </p>
-      )
-    case 'bullet':
-      return (
-        <div className="flex gap-2.5 text-[14.5px] leading-relaxed text-lavender-100/90">
-          <span className="mt-[9px] w-1.5 h-1.5 rounded-full bg-lavender-400 shrink-0" />
-          <div className="min-w-0">
-            <Rich text={block.text} query={query} />
-          </div>
-        </div>
-      )
-    case 'warning':
-      return (
-        <div className="flex gap-3 rounded-xl border border-amber-400/35 bg-amber-400/10 px-3.5 py-3">
-          <AlertTriangle className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
-          <div className="text-[14px] leading-relaxed text-amber-50 font-medium min-w-0">
-            <Rich text={block.text} query={query} />
-          </div>
-        </div>
-      )
+    case 'p':
+      return <Paragraph runs={block.runs} li={block.li} lvl={block.lvl} warning={block.warning} query={query} />
+    case 'img':
+      return <GuideImage src={block.src} />
     case 'pairs':
       return (
         <dl className="rounded-xl border border-lavender-500/20 divide-y divide-lavender-500/15 overflow-hidden">
-          {block.rows.map((r, i) => {
-            const isCode = SSR_CODES.has(r.key) || /^[A-Z]{2,6}$/.test(r.key)
-            return (
-              <div key={i} className="grid sm:grid-cols-[minmax(110px,30%)_1fr] gap-x-4 gap-y-1 px-3.5 py-3 bg-navy-900/40">
-                {r.key && (
-                  <dt>
-                    {isCode ? (
-                      <span className="inline-block rounded-lg px-2 py-0.5 text-[13px] font-bold tracking-wide bg-lavender-600/30 text-lavender-100 border border-lavender-500/35">
-                        {r.key}
-                      </span>
-                    ) : (
-                      <span className="text-[13px] font-semibold text-lavender-300">
-                        <Rich text={r.key} query={query} />
-                      </span>
-                    )}
-                  </dt>
-                )}
-                <dd className={cn('text-[14px] leading-relaxed text-lavender-100/90 min-w-0', !r.key && 'sm:col-span-2')}>
-                  <Rich text={r.value} query={query} />
-                </dd>
-              </div>
-            )
-          })}
+          {block.rows.map((r, i) => (
+            <div key={i} className="grid sm:grid-cols-[minmax(110px,30%)_1fr] gap-x-4 gap-y-1.5 px-3.5 py-3 bg-navy-900/40">
+              <dt className="text-[13.5px] font-semibold text-lavender-300 min-w-0">
+                <CellContent cell={r.key} query={query} />
+              </dt>
+              <dd className="text-[14px] leading-relaxed text-lavender-100/90 min-w-0">
+                <CellContent cell={r.value} query={query} />
+              </dd>
+            </div>
+          ))}
         </dl>
       )
-    case 'table': {
-      const [head, ...rest] = block.rows
-      const headLike = head[0] === '' || head.every((c) => c.length <= 30)
-      const body = headLike ? rest : block.rows
-      return (
-        <div className="-mx-1 overflow-x-auto rounded-xl border border-lavender-500/20">
-          <table className="w-full text-[13.5px] border-collapse">
-            {headLike && (
-              <thead>
-                <tr className="bg-lavender-600/20">
-                  {head.map((c, i) => (
-                    <th key={i} className="px-3 py-2.5 text-left font-semibold text-lavender-200 align-bottom min-w-[100px]">
-                      <Rich text={c} query={query} />
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-            )}
-            <tbody>
-              {body.map((row, ri) => (
-                <tr key={ri} className="border-t border-lavender-500/15 odd:bg-navy-900/40">
-                  {row.map((c, ci) => (
-                    <td
-                      key={ci}
-                      className={cn(
-                        'px-3 py-2.5 align-top text-lavender-100/90 min-w-[100px]',
-                        ci === 0 && 'font-semibold text-lavender-200',
-                      )}
-                    >
-                      <Rich text={c} query={query} />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )
-    }
+    case 'table':
+      return <DataTable rows={block.rows} query={query} />
   }
-}
-
-function blockText(b: GuideBlock): string {
-  if (b.kind === 'pairs') return b.rows.map((r) => `${r.key} ${r.value}`).join(' ')
-  if (b.kind === 'table') return b.rows.flat().join(' ')
-  return b.text
 }
 
 function countMatches(s: GuideSection, q: string): number {
   const needle = q.toLowerCase()
   let n = s.title.toLowerCase().split(needle).length - 1
-  for (const b of s.blocks) n += blockText(b).toLowerCase().split(needle).length - 1
+  for (const b of s.blocks) n += guideBlockText(b).toLowerCase().split(needle).length - 1
   return n
 }
 
-function FactChip({ text }: { text: string }) {
-  const idx = text.indexOf(':')
-  const label = idx > 0 && idx < 28 ? text.slice(0, idx).trim() : ''
-  const value = label ? text.slice(idx + 1).trim() : text
-  if (!value) return null
+function Legend() {
   return (
-    <div className="rounded-xl bg-navy-900/50 border border-lavender-500/20 px-3 py-2 min-w-0">
-      {label && <div className="text-[10.5px] uppercase tracking-wider text-navy-400 mb-0.5">{label}</div>}
-      <div className="text-[13.5px] font-medium text-lavender-100 break-words">
-        <Rich text={value} query="" />
-      </div>
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11.5px] text-navy-300">
+      <span className="inline-flex items-center gap-1">
+        <span className="rounded-md px-1 font-mono font-bold bg-emerald-400/15 text-emerald-200 border border-emerald-400/40">0GP</span>
+        код услуги — нажмите, чтобы скопировать
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <span className="rounded-md px-1 font-bold bg-lavender-600/25 text-lavender-200 border border-lavender-500/30">PETC</span>
+        SSR / ремарка
+      </span>
+      <span className="bg-yellow-300/20 text-yellow-50 rounded-sm px-1">выделено в оригинале</span>
+      <span className="text-red-300">красным в оригинале</span>
+      <span className="line-through opacity-60">зачёркнуто в оригинале</span>
     </div>
   )
 }
@@ -240,13 +326,15 @@ function FactChip({ text }: { text: string }) {
 export function AirlineGuideView({
   title,
   code,
-  body,
+  blocks,
+  header,
 }: {
   title: string
   code?: string | null
-  body: string
+  blocks: RawBlock[]
+  header?: string
 }) {
-  const guide = useMemo(() => parseGuide(body), [body])
+  const guide = useMemo(() => parseGuide(blocks), [blocks])
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
 
@@ -257,7 +345,8 @@ export function AirlineGuideView({
   )
   const total = matches?.reduce((a, b) => a + b, 0) ?? 0
   const visible = guide.sections.filter((_, i) => !matches || matches[i] > 0)
-  const minutes = Math.max(1, Math.round(body.length / 1200))
+  const chars = guide.sections.reduce((n, s) => n + s.blocks.reduce((m, b) => m + guideBlockText(b).length, 0), 0)
+  const minutes = Math.max(1, Math.round(chars / 1200))
 
   const toggle = (id: string) =>
     setCollapsed((prev) => {
@@ -276,14 +365,14 @@ export function AirlineGuideView({
     document.getElementById(`guide-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
-  if (!guide.sections.length && !guide.facts.length) {
+  if (!guide.sections.length && !guide.facts) {
     return <p className="text-center text-navy-400 py-10">Текст памятки пуст</p>
   }
 
   return (
     <div className="space-y-4">
       <section
-        className="rounded-2xl border border-lavender-500/30 p-4 sm:p-5"
+        className="rounded-2xl border border-lavender-500/30 p-4 sm:p-5 space-y-4"
         style={{
           background: `linear-gradient(140deg, hsl(${airlineHue(code)} 45% 30% / 0.35), #2a2a32 65%)`,
         }}
@@ -294,6 +383,7 @@ export function AirlineGuideView({
             <h2 className="text-[20px] sm:text-[22px] font-bold text-lavender-50 leading-tight">
               {guideDisplayName(title, code)}
             </h2>
+            {guide.meta.title && <p className="text-[13px] text-lavender-200 mt-0.5">{guide.meta.title}</p>}
             <p className="text-[12.5px] text-navy-300 mt-1">
               {[guide.meta.date && `Обновлено ${guide.meta.date}`, guide.meta.author, `~${minutes} мин чтения`]
                 .filter(Boolean)
@@ -302,21 +392,17 @@ export function AirlineGuideView({
           </div>
         </div>
 
-        {guide.facts.length > 0 && (
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {guide.facts.flat().map((f, i) => (
-              <FactChip key={i} text={f} />
-            ))}
-          </div>
-        )}
+        {guide.facts && <DataTable rows={guide.facts} query="" />}
       </section>
+
+      <Legend />
 
       <div className="sticky top-[60px] z-30 -mx-1 px-1 py-2 app-bg space-y-2">
         <div className="relative">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Найти в памятке: PETC, коляска, аварийный ряд…"
+            placeholder="Найти в памятке: PETC, 0GP, коляска…"
             className="pl-11 pr-24"
           />
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" />
@@ -380,10 +466,12 @@ export function AirlineGuideView({
         )
       })}
 
-      {guide.meta.document && (
+      {(guide.meta.document || header) && (
         <footer className="flex gap-2.5 rounded-xl border border-lavender-500/15 px-3.5 py-3 text-[12px] text-navy-400">
           <FileText className="w-4 h-4 shrink-0 mt-0.5" />
-          <span>Источник: {guide.meta.document}</span>
+          <span>
+            Источник: {[guide.meta.document, header].filter(Boolean).join(' · ')}
+          </span>
         </footer>
       )}
     </div>

@@ -1,11 +1,36 @@
-/** Разбор текста памятки АК (из .docx, строки таблиц через « | ») в структурированные блоки */
+/**
+ * Памятки АК: структура из .docx (см. scripts/import_pulkovo.py) → разделы для экрана.
+ * Текст не меняется и не переставляется — только раскладывается по разделам и оформлению.
+ */
+
+export interface Run {
+  x: string
+  /** жирный */
+  b?: 1
+  /** зачёркнуто */
+  s?: 1
+  /** выделено маркером / заливкой */
+  hl?: 1
+  /** красный шрифт */
+  red?: 1
+}
+
+export interface Cell {
+  c: RawBlock[]
+  cs?: number
+  rs?: number
+}
+
+export type RawBlock =
+  | { t: 'p'; runs: Run[]; li?: string; lvl?: number }
+  | { t: 'img'; src: string }
+  | { t: 'table'; rows: Cell[][] }
 
 export type GuideBlock =
-  | { kind: 'text'; text: string }
-  | { kind: 'bullet'; text: string }
-  | { kind: 'warning'; text: string }
-  | { kind: 'pairs'; rows: { key: string; value: string }[] }
-  | { kind: 'table'; rows: string[][] }
+  | { kind: 'p'; runs: Run[]; li?: string; lvl?: number; warning: boolean }
+  | { kind: 'img'; src: string }
+  | { kind: 'pairs'; rows: { key: Cell; value: Cell }[] }
+  | { kind: 'table'; rows: Cell[][] }
 
 export interface GuideSection {
   id: string
@@ -17,14 +42,19 @@ export interface GuideMeta {
   document?: string
   author?: string
   date?: string
+  /** Заголовок из документа, например «Памятка а/к SU(FV)«Аэрофлот» (Россия)» */
+  title?: string
 }
 
 export interface ParsedGuide {
   meta: GuideMeta
-  /** «Шапка» памятки: код, телефон, DCS, офис, бирки, касса — строками ячеек */
-  facts: string[][]
+  /** Таблица-«шапка»: код, телефон, DCS, офис, бирки, касса — как в документе */
+  facts: Cell[][] | null
   sections: GuideSection[]
 }
+
+/** Перенос строки внутри абзаца/ячейки */
+export const CELL_BR = String.fromCharCode(0x2028)
 
 const META_KEYS: Record<string, keyof GuideMeta> = {
   документ: 'document',
@@ -32,11 +62,32 @@ const META_KEYS: Record<string, keyof GuideMeta> = {
   дата: 'date',
 }
 
-const SEP = ' | '
-/** Перенос строки внутри ячейки таблицы (см. scripts/import_pulkovo.py) */
-export const CELL_BR = String.fromCharCode(0x2028)
+const WARNING_RE = /(ВАЖНО|ВНИМАНИЕ|ЗАПРЕЩ|НЕЛЬЗЯ|СТРОГО|ОБЯЗАТЕЛЬНО|НЕ ДОПУСКА|!!)/
 
-const WARNING_RE = /(ВАЖНО|ЗАПРЕЩ|НЕЛЬЗЯ|СТРОГО|ОБЯЗАТЕЛЬНО|НЕ ДОПУСКА|!!)/
+export function runsText(runs: Run[]): string {
+  return runs.map((r) => r.x).join('')
+}
+
+export function cellText(cell: Cell): string {
+  return blocksText(cell.c)
+}
+
+function blocksText(blocks: RawBlock[]): string {
+  return blocks
+    .map((b) => {
+      if (b.t === 'p') return runsText(b.runs)
+      if (b.t === 'table') return b.rows.map((r) => r.map(cellText).join(' ')).join(' ')
+      return ''
+    })
+    .join(' ')
+}
+
+export function guideBlockText(b: GuideBlock): string {
+  if (b.kind === 'p') return `${b.li ?? ''} ${runsText(b.runs)}`
+  if (b.kind === 'pairs') return b.rows.map((r) => `${cellText(r.key)} ${cellText(r.value)}`).join(' ')
+  if (b.kind === 'table') return b.rows.map((r) => r.map(cellText).join(' ')).join(' ')
+  return ''
+}
 
 function isMostlyUpper(s: string): boolean {
   const letters = s.replace(/[^A-Za-zА-Яа-яЁё]/g, '')
@@ -45,133 +96,151 @@ function isMostlyUpper(s: string): boolean {
   return upper / letters.length > 0.7
 }
 
-function isHeading(line: string): boolean {
-  if (line.includes(SEP) || line.length > 40) return false
-  if (/:\s*$/.test(line)) return true
-  // Короткие «Особенности», «Посадка», «Low cost»: без цифр и без точки в конце
-  return line.length <= 28 && !/[\d.!?,;]/.test(line) && line.split(/\s+/).length <= 3
+function isFactText(s: string): boolean {
+  return /(Название а\/к|Host|DCS|бирки|Касса|посадочные|Офис|Телефон|Тел\.)/i.test(s)
 }
 
-function cleanHeading(line: string): string {
-  const t = line.replace(/:\s*$/, '').trim()
-  return t.charAt(0).toUpperCase() + t.slice(1)
-}
-
-function isFactLine(line: string): boolean {
-  return /(Название а\/к|Host|DCS|бирки|Бирки|Касса|посадочные|Посадочные|Офис|Телефон|Тел\.)/.test(line)
-}
-
-function tableBlock(rows: string[][]): GuideBlock {
-  const twoCol = rows.filter((r) => r.length === 2).length
-  if (twoCol / rows.length >= 0.6) {
-    return {
-      kind: 'pairs',
-      rows: rows.map((r) =>
-        r.length === 2 ? { key: r[0], value: r[1] } : { key: '', value: r.join(' · ') },
-      ),
-    }
+/** Короткий абзац-заголовок: «Регистрация:», «Особенности», жирное «Посадка» */
+function headingOf(block: Extract<RawBlock, { t: 'p' }>): string | null {
+  if (block.li) return null
+  const text = runsText(block.runs).trim()
+  if (!text || text.length > 40 || text.includes(CELL_BR)) return null
+  // «- букет цветов», «4. Все пассажиры…» — пункты списка, не заголовки
+  if (/^([-−–•·*]|\d+[.)])/.test(text)) return null
+  const allBold = block.runs.every((r) => r.b || !r.x.trim())
+  if (/:$/.test(text) || (allBold && !/[.!?;,]$/.test(text)) || (text.length <= 28 && !/[\d.!?,;]/.test(text) && text.split(/\s+/).length <= 3)) {
+    const t = text.replace(/:$/, '').trim()
+    return t.charAt(0).toUpperCase() + t.slice(1)
   }
-  // Строка заголовков часто без первой (пустой) ячейки — выравниваем вправо
-  const width = Math.max(...rows.map((r) => r.length))
-  const [head, ...rest] = rows
-  const padded = head.length < width ? [[...Array(width - head.length).fill(''), ...head], ...rest] : rows
-  return { kind: 'table', rows: padded }
+  return null
 }
 
-/** «DCS:» + «Amadeus» → «DCS: Amadeus» */
-function mergeLabelCells(cells: string[]): string[] {
-  const out: string[] = []
-  for (const raw of cells) {
-    // «Название а/к:» — подпись без значения, название и так в заголовке
-    const c = raw.replace(/^Название а\/к:?\s*/i, '')
-    if (!c) continue
-    const prev = out[out.length - 1]
-    if (prev && /:$/.test(prev) && !c.includes(':')) out[out.length - 1] = `${prev} ${c}`
-    else out.push(c)
-  }
-  return out
+/** «Регистрация: По тарифу …» (жирная подпись в начале абзаца) → заголовок + абзац */
+function splitLeadHeading(block: Extract<RawBlock, { t: 'p' }>): [string, Run[]] | null {
+  const first = block.runs[0]
+  if (block.li || !first?.b) return null
+  const m = first.x.match(/^([^:]{2,30}):\s*/)
+  if (!m || m[0].length === first.x.length + 1) return null
+  const rest = [{ ...first, x: first.x.slice(m[0].length) }, ...block.runs.slice(1)].filter((r) => r.x)
+  if (!runsText(rest).trim()) return null
+  return [m[1].trim(), rest]
 }
 
-function lineBlock(line: string): GuideBlock {
-  if (/^[-−–•·]\s*/.test(line)) {
-    const text = line.replace(/^[-−–•·]\s*/, '')
-    return { kind: WARNING_RE.test(text) ? 'warning' : 'bullet', text }
-  }
-  if (WARNING_RE.test(line) || isMostlyUpper(line)) return { kind: 'warning', text: line }
-  return { kind: 'text', text: line }
+function tableBlock(rows: Cell[][]): GuideBlock {
+  const pairs = rows.every((r) => r.length === 2 && r.every((c) => !c.cs && !c.rs))
+  if (pairs) return { kind: 'pairs', rows: rows.map(([key, value]) => ({ key, value })) }
+  return { kind: 'table', rows }
 }
 
-export function parseGuide(body: string): ParsedGuide {
+export function parseGuide(raw: RawBlock[]): ParsedGuide {
   const meta: GuideMeta = {}
-  const facts: string[][] = []
+  let facts: Cell[][] | null = null
   const sections: GuideSection[] = []
   let current: GuideSection = { id: 's0', title: 'Общее', blocks: [] }
-  let tableRows: string[][] = []
-  let seenTitle = false
-  let inFacts = false
 
-  const flushTable = () => {
-    if (tableRows.length) current.blocks.push(tableBlock(tableRows))
-    tableRows = []
-  }
-  const startSection = (title: string) => {
-    flushTable()
+  const startSection = (title: string, source: Run[]) => {
+    // Два заголовка подряд («Регистрация:» → «Mane line»): второй — подзаголовок внутри первого
+    if (!current.blocks.length && current.id !== 's0') {
+      current.blocks.push({ kind: 'p', runs: source.map((r) => ({ ...r, b: 1 })), warning: false })
+      return
+    }
     if (current.blocks.length) sections.push(current)
     current = { id: `s${sections.length + 1}`, title, blocks: [] }
   }
+  const atStart = () => !sections.length && !current.blocks.length
 
-  for (const raw of body.split('\n')) {
-    const line = raw.split(CELL_BR).map((p) => p.replace(/\s+/g, ' ').trim()).join(CELL_BR).trim()
-    if (!line) continue
-
-    const cells = line.split(SEP).map((c) => c.trim()).filter(Boolean)
-    const metaKey = cells.length === 2 ? META_KEYS[cells[0].toLowerCase()] : undefined
-    if (metaKey && !meta[metaKey]) {
-      meta[metaKey] = cells[1]
+  for (const block of raw) {
+    if (block.t === 'img') {
+      current.blocks.push({ kind: 'img', src: block.src })
       continue
     }
 
-    // Заголовок «Памятка а/к …» дублирует название — пропускаем
-    if (/^Памятка а\/к/i.test(line)) {
-      seenTitle = true
+    if (block.t === 'table') {
+      // Строки «документ / исполнитель / дата» → сведения об источнике
+      const rows = block.rows.filter((r) => {
+        const key = r.length === 2 ? META_KEYS[cellText(r[0]).trim().toLowerCase()] : undefined
+        if (key && !meta[key]) {
+          meta[key] = cellText(r[1]).trim()
+          return false
+        }
+        return true
+      })
+      if (!rows.length) continue
+      if (atStart() && !facts && isFactText(rows.map((r) => r.map(cellText).join(' ')).join(' '))) {
+        facts = rows
+        continue
+      }
+      current.blocks.push(tableBlock(rows))
       continue
     }
 
-    // Шапка с контактами идёт до первого раздела: строки с «Касса», «Офис», телефоны и их продолжения
-    const atStart = !sections.length && !current.blocks.length && !tableRows.length
-    const isPhoneOnly = /^[+\d\s()-]+$/.test(line)
-    if (atStart && (isFactLine(line) || (inFacts && (cells.length > 1 || isPhoneOnly)))) {
-      inFacts = true
-      facts.push(mergeLabelCells(cells))
-      continue
-    }
-    inFacts = false
-
-    if (isHeading(line) && (seenTitle || sections.length || current.blocks.length)) {
-      startSection(cleanHeading(line))
+    const text = runsText(block.runs).trim()
+    // \b в JS не работает с кириллицей — граница слова через пробел/конец строки
+    if (!meta.title && /^Памятка(\s|$)/i.test(text)) {
+      meta.title = text
       continue
     }
 
-    if (cells.length > 1) {
-      tableRows.push(cells)
+    const heading = headingOf(block)
+    if (heading) {
+      startSection(heading, block.runs)
+      continue
+    }
+    const lead = splitLeadHeading(block)
+    if (lead) {
+      startSection(lead[0], [{ ...block.runs[0], x: `${lead[0]}:` }])
+      const restText = runsText(lead[1])
+      current.blocks.push({ kind: 'p', runs: lead[1], warning: WARNING_RE.test(restText) || isMostlyUpper(restText) })
       continue
     }
 
-    flushTable()
-    current.blocks.push(lineBlock(line))
+    current.blocks.push({
+      kind: 'p',
+      runs: block.runs,
+      li: block.li,
+      lvl: block.lvl,
+      warning: WARNING_RE.test(text) || isMostlyUpper(text),
+    })
   }
 
-  flushTable()
   if (current.blocks.length) sections.push(current)
   return { meta, facts, sections }
 }
 
-/** Коды SSR и служебные сокращения, которые подсвечиваются в тексте */
+/** Коды SSR и служебные сокращения — бейджи в тексте */
 export const SSR_CODES = new Set([
-  'INF', 'CHD', 'UM', 'UMNR', 'PETC', 'AVIH', 'SVAN', 'ESAN', 'WEAP', 'SPEQ', 'CBBG', 'PREG', 'EXST',
+  'INF', 'INFT', 'CHD', 'UM', 'UMNR', 'PETC', 'AVIH', 'SVAN', 'ESAN', 'WEAP', 'SPEQ', 'CBBG', 'PREG', 'EXST',
   'EXBAG', 'STCR', 'MEDA', 'BLND', 'DEAF', 'DPNA', 'DEPU', 'DEPA', 'INAD', 'PRM', 'WCHR', 'WCHS', 'WCHC',
-  'WCMP', 'WCBD', 'WCBW', 'ICTI', 'XBAG', 'BIKE', 'FRAG', 'MAAS', 'SEMN', 'EMD', 'DCS', 'PIL', 'VIP',
+  'WCMP', 'WCBD', 'WCBW', 'WCLB', 'ICTI', 'XBAG', 'BIKE', 'FRAG', 'MAAS', 'SEMN', 'EMD', 'DCS', 'PIL', 'VIP',
+  'RFISC', 'PNR', 'GSTANDBY', 'FQTV', 'OTHS', 'PSM', 'TIMATIC', 'OXYG', 'POXY', 'LANG', 'MEQT', 'DOCS',
 ])
+
+/** Кириллица, похожая на латиницу: в DCS коды вводятся латиницей */
+const LOOKALIKE: Record<string, string> = {
+  А: 'A', В: 'B', С: 'C', Е: 'E', Н: 'H', К: 'K', М: 'M', О: 'O', Р: 'P', Т: 'T', Х: 'X',
+}
+const CODE_CHARS = '0-9A-ZАВСЕНКМОРТХ'
+
+/**
+ * Коды услуг (RFISC и т.п.): 08A, 0GP, 0L0, K23, EW1, SR3 — ровно 3 символа,
+ * начинаются с 0 или с буквы, за которой есть цифра.
+ */
+export const SERVICE_CODE_RE = new RegExp(
+  // «0» + 2 символа, но не хвост числа вроде «1 000»; либо буква + 2 символа, среди которых есть цифра
+  `(?<![0-9A-Za-zА-Яа-яЁё])(?:(?<![0-9][ .,])0[${CODE_CHARS}]{2}|[A-ZАВСЕНКМОРТХ](?=[${CODE_CHARS}]{0,1}[0-9])[${CODE_CHARS}]{2})(?![0-9A-Za-zА-Яа-яЁё])`,
+)
+
+export function toLatinCode(code: string): string {
+  return [...code].map((c) => LOOKALIKE[c] ?? c).join('')
+}
+
+/** Телефоны вида +7(931)228-98-59, 89218606801 */
+export const PHONE_RE = /\+?\d[\d\s()-]{8,}\d/
+
+export function phoneHref(raw: string): string {
+  const digits = raw.replace(/[^\d+]/g, '')
+  return `tel:${digits.startsWith('8') && digits.length === 11 ? `+7${digits.slice(1)}` : digits}`
+}
 
 /** Стабильный оттенок цвета для аватара АК */
 export function airlineHue(code?: string | null): number {
@@ -187,12 +256,4 @@ export function guideDisplayName(title: string, code?: string | null): string {
     if (rest) return rest
   }
   return title
-}
-
-/** Ищет телефоны вида +7(931)228-98-59, 89218606801 */
-export const PHONE_RE = /(\+?\d[\d\s()-]{8,}\d)/g
-
-export function phoneHref(raw: string): string {
-  const digits = raw.replace(/[^\d+]/g, '')
-  return `tel:${digits.startsWith('8') && digits.length === 11 ? `+7${digits.slice(1)}` : digits}`
 }

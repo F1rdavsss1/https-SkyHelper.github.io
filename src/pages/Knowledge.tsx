@@ -4,7 +4,7 @@ import { ArrowLeft, ChevronRight, Search } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 import { AirlineAvatar, AirlineGuideView } from '../components/AirlineGuideView'
-import { CELL_BR, guideDisplayName, parseGuide } from '../lib/airlineGuide'
+import { CELL_BR, guideDisplayName, parseGuide, type RawBlock } from '../lib/airlineGuide'
 import {
   knowledgeSections,
   petcSteps,
@@ -19,6 +19,8 @@ type AirlineGuide = {
   titleRu: string
   airlineCode?: string | null
   bodyRu: string
+  blocks: RawBlock[]
+  header?: string
   fileName?: string
 }
 
@@ -174,7 +176,7 @@ export function KnowledgeSection() {
     () =>
       new Map(
         guides.map((g) => {
-          const p = parseGuide(g.bodyRu)
+          const p = parseGuide(g.blocks ?? [])
           return [g.id, { date: p.meta.date, sections: p.sections.map((s) => s.title).filter((t) => t !== 'Общее') }]
         }),
       ),
@@ -215,7 +217,12 @@ export function KnowledgeSection() {
           </div>
         </header>
         <main className="page-wrap py-4">
-          <AirlineGuideView title={openGuide.titleRu} code={openGuide.airlineCode} body={openGuide.bodyRu} />
+          <AirlineGuideView
+            title={openGuide.titleRu}
+            code={openGuide.airlineCode}
+            blocks={openGuide.blocks ?? []}
+            header={openGuide.header}
+          />
         </main>
       </div>
     )
