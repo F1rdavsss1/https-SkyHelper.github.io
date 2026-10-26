@@ -1,6 +1,21 @@
 /** Pulkovo (LED) public board → AeroDesk flight DTO */
 
+import fs from 'node:fs'
+import tls from 'node:tls'
+
 const LED_API = 'https://pulkovoairport.ru/api/'
+
+// pulkovoairport.ru does not send its intermediate certificate, so Node's fetch
+// fails with UNABLE_TO_VERIFY_LEAF_SIGNATURE. Trust the bundled intermediate.
+const LED_INTERMEDIATE_CA = fs.readFileSync(
+  new URL('./certs/globalsign-gcc-r46-dv-tls-ca-2025.pem', import.meta.url),
+  'utf8',
+)
+if (typeof tls.setDefaultCACertificates === 'function') {
+  tls.setDefaultCACertificates([...tls.getCACertificates('default'), LED_INTERMEDIATE_CA])
+} else {
+  console.warn('[led] Node < 22.19: run with NODE_EXTRA_CA_CERTS=server/certs/globalsign-gcc-r46-dv-tls-ca-2025.pem')
+}
 
 const LED_AIRPORT = {
   code: 'LED',
